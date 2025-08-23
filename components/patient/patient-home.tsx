@@ -19,8 +19,8 @@ export function PatientHome({ onNavigate, onStartPurchase }: PatientHomeProps) {
     <div className="space-y-6">
       {/* Welcome Section */}
       <div className="text-center">
-        <h2 className="text-heading-2 text-foreground mb-2">Your prescriptions, protected</h2>
-        <p className="text-body text-muted-foreground">Secure medicine access with zero-knowledge verification</p>
+        <h2 className="text-2xl font-bold text-foreground mb-2">Your prescriptions, protected</h2>
+        <p className="text-muted-foreground">Secure medicine access with zero-knowledge verification</p>
       </div>
 
       {/* Quick Stats */}
@@ -29,14 +29,14 @@ export function PatientHome({ onNavigate, onStartPurchase }: PatientHomeProps) {
           <CardContent className="p-4 text-center">
             <Wallet className="h-8 w-8 text-primary mx-auto mb-2" />
             <div className="text-2xl font-bold text-foreground">{validVCs.length}</div>
-            <div className="text-body-sm text-muted-foreground">Valid Prescriptions</div>
+            <div className="text-sm text-muted-foreground">Valid Prescriptions</div>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-4 text-center">
             <ShoppingBag className="h-8 w-8 text-secondary mx-auto mb-2" />
             <div className="text-2xl font-bold text-foreground">{DEMO_ORDERS.length}</div>
-            <div className="text-body-sm text-muted-foreground">Total Orders</div>
+            <div className="text-sm text-muted-foreground">Total Orders</div>
           </CardContent>
         </Card>
       </div>
@@ -44,7 +44,7 @@ export function PatientHome({ onNavigate, onStartPurchase }: PatientHomeProps) {
       {/* Quick Actions */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-heading-3">Quick Actions</CardTitle>
+          <CardTitle className="text-lg">Quick Actions</CardTitle>
         </CardHeader>
         <CardContent className="space-y-3">
           <Button onClick={onStartPurchase} className="w-full justify-start h-12" size="lg">
@@ -68,7 +68,7 @@ export function PatientHome({ onNavigate, onStartPurchase }: PatientHomeProps) {
       {recentOrders.length > 0 && (
         <Card>
           <CardHeader>
-            <CardTitle className="text-heading-3">Recent Orders</CardTitle>
+            <CardTitle className="text-lg">Recent Orders</CardTitle>
             <CardDescription>Your latest medicine purchases</CardDescription>
           </CardHeader>
           <CardContent className="space-y-3">
@@ -79,8 +79,8 @@ export function PatientHome({ onNavigate, onStartPurchase }: PatientHomeProps) {
                     <ShoppingBag className="h-5 w-5 text-primary" />
                   </div>
                   <div>
-                    <div className="font-medium text-body-sm">{order.medicineName}</div>
-                    <div className="text-caption text-muted-foreground flex items-center gap-1">
+                    <div className="font-medium text-sm">{order.medicineName}</div>
+                    <div className="text-xs text-muted-foreground flex items-center gap-1">
                       <MapPin className="h-3 w-3" />
                       {order.pharmacyName}
                     </div>
@@ -94,7 +94,7 @@ export function PatientHome({ onNavigate, onStartPurchase }: PatientHomeProps) {
                   >
                     {order.status.replace("_", " ")}
                   </Badge>
-                  <div className="text-caption text-muted-foreground mt-1">${order.totalPrice}</div>
+                  <div className="text-xs text-muted-foreground mt-1">${order.totalPrice}</div>
                 </div>
               </div>
             ))}
@@ -108,7 +108,7 @@ export function PatientHome({ onNavigate, onStartPurchase }: PatientHomeProps) {
       {/* Active Prescriptions Preview */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-heading-3">Active Prescriptions</CardTitle>
+          <CardTitle className="text-lg">Active Prescriptions</CardTitle>
           <CardDescription>Valid credentials ready for use</CardDescription>
         </CardHeader>
         <CardContent className="space-y-3">
@@ -119,13 +119,13 @@ export function PatientHome({ onNavigate, onStartPurchase }: PatientHomeProps) {
                   <Wallet className="h-5 w-5 text-secondary" />
                 </div>
                 <div>
-                  <div className="font-medium text-body-sm">{vc.medicineName}</div>
-                  <div className="text-caption text-muted-foreground">by {vc.doctorName}</div>
+                  <div className="font-medium text-sm">{vc.medicineName}</div>
+                  <div className="text-xs text-muted-foreground">by {vc.doctorName}</div>
                 </div>
               </div>
               <div className="text-right">
                 <Badge variant="default">Valid</Badge>
-                <div className="text-caption text-muted-foreground mt-1 flex items-center gap-1">
+                <div className="text-xs text-muted-foreground mt-1 flex items-center gap-1">
                   <Clock className="h-3 w-3" />
                   {new Date(vc.expiresAt).toLocaleDateString()}
                 </div>

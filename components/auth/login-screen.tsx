@@ -57,8 +57,8 @@ export function LoginScreen({ language, onLanguageChange }: LoginScreenProps) {
               </div>
             </div>
           </div>
-          <h1 className="text-heading-1 text-foreground">{t("app.name")}</h1>
-          <p className="text-body text-muted-foreground">{t("app.tagline")}</p>
+          <h1 className="text-3xl font-bold text-foreground">{t("app.name")}</h1>
+          <p className="text-muted-foreground">{t("app.tagline")}</p>
 
           {/* Language Toggle */}
           <Button
@@ -73,7 +73,7 @@ export function LoginScreen({ language, onLanguageChange }: LoginScreenProps) {
 
         {/* Privacy Notice */}
         <div className="bg-primary/10 border border-primary/20 rounded-lg p-4">
-          <p className="text-body-sm text-foreground">{t("privacy.message")}</p>
+          <p className="text-sm text-foreground">{t("privacy.message")}</p>
         </div>
 
         {/* Login Form */}
@@ -168,7 +168,7 @@ export function LoginScreen({ language, onLanguageChange }: LoginScreenProps) {
               </Button>
             </form>
 
-            <div className="text-center text-caption text-muted-foreground">
+            <div className="text-center text-xs text-muted-foreground">
               Demo password: <code className="bg-muted px-1 rounded">demo123</code>
             </div>
           </CardContent>

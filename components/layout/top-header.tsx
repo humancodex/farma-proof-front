@@ -25,7 +25,7 @@ export function TopHeader({ language, onLanguageChange }: TopHeaderProps) {
             </div>
           </div>
           <div>
-            <h1 className="text-heading-3 text-foreground">{t("app.name")}</h1>
+            <h1 className="font-bold text-lg text-foreground">{t("app.name")}</h1>
           </div>
         </div>
 

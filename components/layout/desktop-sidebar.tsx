@@ -30,29 +30,29 @@ export function DesktopSidebar({ activeTab, onTabChange, language }: DesktopSide
       case "doctor":
         return [
           { id: "home", label: t("nav.home"), icon: Home },
-          { id: "prescriptions", label: "Prescriptions", icon: FileText },
-          { id: "patients", label: "Patients", icon: User },
+          { id: "prescriptions", label: t("nav.prescriptions"), icon: FileText },
+          { id: "patients", label: t("nav.patients"), icon: User },
           { id: "profile", label: t("nav.profile"), icon: User },
         ]
       case "pharmacy":
         return [
           { id: "home", label: t("nav.home"), icon: Home },
-          { id: "scan", label: "Scan Proofs", icon: Scan },
-          { id: "inventory", label: "Inventory", icon: ShoppingBag },
+          { id: "scan", label: t("nav.scan"), icon: Scan },
+          { id: "inventory", label: t("nav.inventory"), icon: ShoppingBag },
           { id: "profile", label: t("nav.profile"), icon: User },
         ]
       case "auditor":
         return [
-          { id: "home", label: "Dashboard", icon: Home },
-          { id: "analytics", label: "Analytics", icon: BarChart3 },
-          { id: "reports", label: "Reports", icon: FileText },
+          { id: "home", label: t("nav.dashboard"), icon: Home },
+          { id: "analytics", label: t("nav.analytics"), icon: BarChart3 },
+          { id: "reports", label: t("nav.reports"), icon: FileText },
           { id: "profile", label: t("nav.profile"), icon: User },
         ]
       case "admin":
         return [
-          { id: "home", label: "Dashboard", icon: Home },
-          { id: "users", label: "Users", icon: User },
-          { id: "system", label: "System", icon: Settings },
+          { id: "home", label: t("nav.dashboard"), icon: Home },
+          { id: "users", label: t("nav.users"), icon: User },
+          { id: "system", label: t("nav.system"), icon: Settings },
           { id: "profile", label: t("nav.profile"), icon: User },
         ]
       default:
@@ -73,8 +73,10 @@ export function DesktopSidebar({ activeTab, onTabChange, language }: DesktopSide
           </div>
         </div>
         <div>
-          <h1 className="text-heading-3 text-sidebar-foreground">{t("app.name")}</h1>
-          <p className="text-body-sm text-sidebar-foreground/70 capitalize">{user.role} Dashboard</p>
+          <h1 className="text-xl font-bold text-sidebar-foreground">{t("app.name")}</h1>
+          <p className="text-sm text-sidebar-foreground/70 capitalize">
+            {user.role} {t("common.dashboard")}
+          </p>
         </div>
       </div>
 
@@ -110,8 +112,8 @@ export function DesktopSidebar({ activeTab, onTabChange, language }: DesktopSide
             <User className="h-5 w-5 text-primary-foreground" />
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-body-sm font-medium text-sidebar-foreground truncate">{user.name}</p>
-            <p className="text-caption text-sidebar-foreground/70 truncate">{user.email}</p>
+            <p className="text-sm font-medium text-sidebar-foreground truncate">{user.name}</p>
+            <p className="text-xs text-sidebar-foreground/70 truncate">{user.email}</p>
           </div>
         </div>
       </div>

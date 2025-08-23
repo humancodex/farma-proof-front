@@ -4,14 +4,10 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { FileText, Shield, AlertTriangle, CheckCircle, Search, Download, Filter } from "lucide-react"
-import { useTranslation, type Language } from "@/lib/i18n"
+import { useI18n } from "@/lib/i18n"
 
-interface AuditorHomeProps {
-  language: Language
-}
-
-export function AuditorHome({ language }: AuditorHomeProps) {
-  const { t } = useTranslation(language)
+export function AuditorHome() {
+  const { t } = useI18n()
 
   const complianceStats = {
     totalAudits: 2847,
@@ -61,8 +57,8 @@ export function AuditorHome({ language }: AuditorHomeProps) {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-heading-2 text-gray-900">{t("auditor.dashboard")}</h1>
-          <p className="text-body text-gray-600">{t("auditor.complianceOverview")}</p>
+          <h1 className="text-2xl font-bold text-gray-900">{t("auditor.dashboard")}</h1>
+          <p className="text-gray-600">{t("auditor.complianceOverview")}</p>
         </div>
         <Button className="bg-blue-500 hover:bg-blue-600">
           <Download className="w-4 h-4 mr-2" />
@@ -77,7 +73,7 @@ export function AuditorHome({ language }: AuditorHomeProps) {
             <div className="flex items-center space-x-2">
               <FileText className="w-5 h-5 text-blue-500" />
               <div>
-                <p className="text-body-sm text-gray-600">{t("auditor.totalAudits")}</p>
+                <p className="text-sm text-gray-600">{t("auditor.totalAudits")}</p>
                 <p className="text-xl font-bold">{complianceStats.totalAudits.toLocaleString()}</p>
               </div>
             </div>
@@ -89,7 +85,7 @@ export function AuditorHome({ language }: AuditorHomeProps) {
             <div className="flex items-center space-x-2">
               <CheckCircle className="w-5 h-5 text-green-500" />
               <div>
-                <p className="text-body-sm text-gray-600">{t("auditor.passedAudits")}</p>
+                <p className="text-sm text-gray-600">{t("auditor.passedAudits")}</p>
                 <p className="text-xl font-bold">{complianceStats.passedAudits.toLocaleString()}</p>
               </div>
             </div>
@@ -101,7 +97,7 @@ export function AuditorHome({ language }: AuditorHomeProps) {
             <div className="flex items-center space-x-2">
               <AlertTriangle className="w-5 h-5 text-yellow-500" />
               <div>
-                <p className="text-body-sm text-gray-600">{t("auditor.flaggedTransactions")}</p>
+                <p className="text-sm text-gray-600">{t("auditor.flaggedTransactions")}</p>
                 <p className="text-xl font-bold">{complianceStats.flaggedTransactions}</p>
               </div>
             </div>
@@ -113,7 +109,7 @@ export function AuditorHome({ language }: AuditorHomeProps) {
             <div className="flex items-center space-x-2">
               <Shield className="w-5 h-5 text-emerald-500" />
               <div>
-                <p className="text-body-sm text-gray-600">{t("auditor.complianceRate")}</p>
+                <p className="text-sm text-gray-600">{t("auditor.complianceRate")}</p>
                 <p className="text-xl font-bold">{complianceStats.complianceRate}%</p>
               </div>
             </div>
@@ -157,13 +153,13 @@ export function AuditorHome({ language }: AuditorHomeProps) {
                       />
                       <div>
                         <p className="font-medium">{entry.action}</p>
-                        <p className="text-body-sm text-gray-600">
+                        <p className="text-sm text-gray-600">
                           {entry.doctor && `${t("auditor.doctor")}: ${entry.doctor}`}
                           {entry.pharmacy && `${t("auditor.pharmacy")}: ${entry.pharmacy}`}
                           {" • "}
                           {t("auditor.patient")}: {entry.patient}
                         </p>
-                        <p className="text-caption text-gray-500">{entry.timestamp}</p>
+                        <p className="text-xs text-gray-500">{entry.timestamp}</p>
                       </div>
                     </div>
                     <div className="flex items-center space-x-2">
@@ -192,7 +188,7 @@ export function AuditorHome({ language }: AuditorHomeProps) {
                   <div key={report.id} className="flex items-center justify-between p-4 border rounded-lg">
                     <div>
                       <p className="font-medium">{report.title}</p>
-                      <p className="text-body-sm text-gray-600">
+                      <p className="text-sm text-gray-600">
                         {report.period} • {report.date}
                       </p>
                     </div>

@@ -1,21 +1,13 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { Playfair_Display, Source_Sans_3 as Source_Sans_Pro } from "next/font/google"
+import { Inter } from "next/font/google"
 import { AuthProvider } from "@/lib/auth"
 import "./globals.css"
 
-const playfairDisplay = Playfair_Display({
+const inter = Inter({
   subsets: ["latin"],
   display: "swap",
-  variable: "--font-playfair",
-  weight: ["400", "700"],
-})
-
-const sourceSansPro = Source_Sans_Pro({
-  subsets: ["latin"],
-  display: "swap",
-  variable: "--font-source-sans",
-  weight: ["400", "600"],
+  variable: "--font-inter",
 })
 
 export const metadata: Metadata = {
@@ -23,7 +15,7 @@ export const metadata: Metadata = {
   description: "Zero-knowledge verification of prescription purchases on Midnight (Cardano)",
   generator: "v0.app",
   manifest: "/manifest.json",
-  themeColor: "#1f2937", // Updated to match new primary color
+  themeColor: "#34d399", // Updated to emerald green primary color
   viewport: "width=device-width, initial-scale=1",
 }
 
@@ -33,7 +25,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className={`${playfairDisplay.variable} ${sourceSansPro.variable}`}>
+    <html lang="en" className={inter.variable}>
       <body className="font-sans antialiased">
         <AuthProvider>{children}</AuthProvider>
       </body>

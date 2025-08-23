@@ -4,70 +4,70 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  /* Updated color tokens to match modern desktop design brief */
-  --background: #ffffff; /* Main background */
-  --foreground: #1f2937; /* Primary text color */
-  --card: #f9fafb; /* Card background */
-  --card-foreground: #4b5563; /* Card text color */
-  --popover: #ffffff; /* Popover background */
-  --popover-foreground: #1f2937; /* Popover text */
-  --primary: #1f2937; /* Primary actions */
-  --primary-foreground: #ffffff; /* Primary text */
-  --secondary: #8b5cf6; /* Secondary actions */
-  --secondary-foreground: #ffffff; /* Secondary text */
-  --muted: #f1f5f9; /* Muted background */
-  --muted-foreground: #6b7280; /* Muted text */
-  --accent: #8b5cf6; /* Accent elements */
-  --accent-foreground: #ffffff; /* Accent text */
-  --destructive: #be123c; /* Destructive actions */
-  --destructive-foreground: #ffffff; /* Destructive text */
-  --border: #e5e7eb; /* Border color */
-  --input: #f9fafb; /* Input background */
-  --ring: rgba(139, 92, 246, 0.5); /* Ring color for focus states */
-  --chart-1: #0891b2; /* Chart color 1 */
-  --chart-2: #be123c; /* Chart color 2 */
-  --chart-3: #1f2937; /* Chart color 3 */
-  --chart-4: #8b5cf6; /* Chart color 4 */
-  --chart-5: #ec4899; /* Chart color 5 */
-  --radius: 0.25rem; /* Corner rounding */
-  --sidebar: #f9fafb; /* Sidebar background */
-  --sidebar-foreground: #4b5563; /* Sidebar text */
-  --sidebar-primary: #1f2937; /* Sidebar primary background */
-  --sidebar-primary-foreground: #ffffff; /* Sidebar primary text */
-  --sidebar-accent: #8b5cf6; /* Sidebar accent */
-  --sidebar-accent-foreground: #ffffff; /* Sidebar accent text */
-  --sidebar-border: #e5e7eb; /* Sidebar border */
-  --sidebar-ring: rgba(139, 92, 246, 0.5); /* Sidebar focus ring */
+  /* Healthcare color tokens */
+  --background: #ffffff;
+  --foreground: #1f2937;
+  --card: #f9fafb;
+  --card-foreground: #4b5563;
+  --popover: #ffffff;
+  --popover-foreground: #1f2937;
+  --primary: #34d399; /* Emerald green for healthcare trust */
+  --primary-foreground: #ffffff;
+  --secondary: #3b82f6; /* Sky blue for technology */
+  --secondary-foreground: #ffffff;
+  --muted: #f1f5f9;
+  --muted-foreground: #6b7280;
+  --accent: #3b82f6;
+  --accent-foreground: #ffffff;
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+  --border: #e5e7eb;
+  --input: #f9fafb;
+  --ring: rgba(52, 211, 153, 0.5);
+  --chart-1: #34d399;
+  --chart-2: #3b82f6;
+  --chart-3: #1f2937;
+  --chart-4: #8b5cf6;
+  --chart-5: #ec4899;
+  --radius: 0.5rem;
+  --sidebar: #f9fafb;
+  --sidebar-foreground: #4b5563;
+  --sidebar-primary: #34d399;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #3b82f6;
+  --sidebar-accent-foreground: #ffffff;
+  --sidebar-border: #e5e7eb;
+  --sidebar-ring: rgba(52, 211, 153, 0.5);
 }
 
 .dark {
-  --background: #0f172a; /* Dark background */
-  --foreground: #f1f5f9; /* Light text */
-  --card: #1e293b; /* Dark card background */
-  --card-foreground: #f1f5f9; /* Light card text */
-  --popover: #1e293b; /* Dark popover background */
-  --popover-foreground: #f1f5f9; /* Light popover text */
-  --primary: #8b5cf6; /* Purple primary in dark mode */
-  --primary-foreground: #ffffff; /* White text on primary */
-  --secondary: #1f2937; /* Dark secondary */
-  --secondary-foreground: #f1f5f9; /* Light text on secondary */
-  --muted: #334155; /* Dark muted background */
-  --muted-foreground: #94a3b8; /* Light muted text */
-  --accent: #8b5cf6; /* Purple accent */
-  --accent-foreground: #ffffff; /* White accent text */
-  --destructive: #be123c; /* Red for errors */
-  --destructive-foreground: #ffffff; /* White error text */
-  --border: #334155; /* Dark border */
-  --input: #334155; /* Dark input background */
-  --ring: rgba(139, 92, 246, 0.5); /* Purple focus ring */
-  --sidebar: #1e293b; /* Dark sidebar */
-  --sidebar-foreground: #f1f5f9; /* Light sidebar text */
-  --sidebar-primary: #8b5cf6; /* Purple sidebar primary */
-  --sidebar-primary-foreground: #ffffff; /* White sidebar primary text */
-  --sidebar-accent: #334155; /* Dark sidebar accent */
-  --sidebar-accent-foreground: #f1f5f9; /* Light sidebar accent text */
-  --sidebar-border: #334155; /* Dark sidebar border */
-  --sidebar-ring: rgba(139, 92, 246, 0.5); /* Purple sidebar focus */
+  --background: #0f172a;
+  --foreground: #f1f5f9;
+  --card: #1e293b;
+  --card-foreground: #f1f5f9;
+  --popover: #1e293b;
+  --popover-foreground: #f1f5f9;
+  --primary: #34d399;
+  --primary-foreground: #0f172a;
+  --secondary: #3b82f6;
+  --secondary-foreground: #ffffff;
+  --muted: #334155;
+  --muted-foreground: #94a3b8;
+  --accent: #3b82f6;
+  --accent-foreground: #ffffff;
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+  --border: #334155;
+  --input: #334155;
+  --ring: rgba(52, 211, 153, 0.5);
+  --sidebar: #1e293b;
+  --sidebar-foreground: #f1f5f9;
+  --sidebar-primary: #34d399;
+  --sidebar-primary-foreground: #0f172a;
+  --sidebar-accent: #334155;
+  --sidebar-accent-foreground: #f1f5f9;
+  --sidebar-border: #334155;
+  --sidebar-ring: rgba(52, 211, 153, 0.5);
 }
 
 @theme inline {
@@ -107,71 +107,73 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
-  /* Added desktop typography variables */
-  --font-heading: var(--font-playfair);
-  --font-body: var(--font-source-sans);
+  /* Modern typography system with Inter font */
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", "Monaco", "Cascadia Code", "Roboto Mono", monospace;
 }
 
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
-    @apply bg-background text-foreground font-sans;
+    @apply bg-background text-foreground font-sans antialiased;
+    /* Unified typography with Inter font */
+    font-family: var(--font-sans);
+    line-height: 1.6;
   }
-  /* Unified typography system with consistent heading hierarchy */
-  h1 {
-    @apply text-3xl font-bold;
-    font-family: var(--font-playfair);
-  }
-  h2 {
-    @apply text-2xl font-bold;
-    font-family: var(--font-playfair);
-  }
-  h3 {
-    @apply text-xl font-semibold;
-    font-family: var(--font-playfair);
-  }
-  h4 {
-    @apply text-lg font-semibold;
-    font-family: var(--font-source-sans);
-  }
+
+  /* Modern typography hierarchy */
+  h1,
+  h2,
+  h3,
+  h4,
   h5,
   h6 {
-    @apply text-base font-medium;
-    font-family: var(--font-source-sans);
+    @apply font-semibold tracking-tight;
+    font-family: var(--font-sans);
+    line-height: 1.2;
   }
+
+  h1 {
+    @apply text-3xl lg:text-4xl;
+  }
+  h2 {
+    @apply text-2xl lg:text-3xl;
+  }
+  h3 {
+    @apply text-xl lg:text-2xl;
+  }
+  h4 {
+    @apply text-lg lg:text-xl;
+  }
+  h5 {
+    @apply text-base lg:text-lg;
+  }
+  h6 {
+    @apply text-sm lg:text-base;
+  }
+
   p,
   span,
-  div,
-  button,
-  input,
-  label {
-    font-family: var(--font-source-sans);
+  div {
+    font-family: var(--font-sans);
   }
-  /* Consistent text size classes for better hierarchy */
-  .text-heading-1 {
-    @apply text-3xl font-bold;
-    font-family: var(--font-playfair);
+
+  /* Technical text styling */
+  code,
+  .font-mono {
+    font-family: var(--font-mono);
+    @apply text-sm bg-muted px-1 py-0.5 rounded;
   }
-  .text-heading-2 {
-    @apply text-2xl font-bold;
-    font-family: var(--font-playfair);
-  }
-  .text-heading-3 {
-    @apply text-xl font-semibold;
-    font-family: var(--font-playfair);
-  }
-  .text-body-lg {
-    @apply text-lg font-normal;
-  }
+
+  /* Improved readability */
   .text-body {
-    @apply text-base font-normal;
+    @apply text-base leading-relaxed;
   }
-  .text-body-sm {
-    @apply text-sm font-normal;
-  }
+
   .text-caption {
-    @apply text-xs font-normal;
+    @apply text-sm text-muted-foreground;
   }
 }
