@@ -22,8 +22,10 @@ export function DoctorHome({ onNavigate, onIssuePrescription }: DoctorHomeProps)
     <div className="space-y-6">
       {/* Welcome Section */}
       <div className="text-center">
-        <h2 className="text-heading-2 text-foreground mb-2">Doctor Dashboard</h2>
-        <p className="text-body text-muted-foreground">Manage digital prescriptions securely</p>
+        <h2 className="text-2xl font-bold text-foreground mb-2 font-[family-name:var(--font-work-sans)]">
+          Doctor Dashboard
+        </h2>
+        <p className="text-muted-foreground">Manage digital prescriptions securely</p>
       </div>
 
       {/* Stats Cards */}
@@ -32,14 +34,14 @@ export function DoctorHome({ onNavigate, onIssuePrescription }: DoctorHomeProps)
           <CardContent className="p-4 text-center">
             <FileText className="h-8 w-8 text-secondary mx-auto mb-2" />
             <div className="text-2xl font-bold text-foreground">{totalPrescriptions}</div>
-            <div className="text-body-sm text-muted-foreground">Total Issued</div>
+            <div className="text-sm text-muted-foreground">Total Issued</div>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-4 text-center">
             <CheckCircle className="h-8 w-8 text-primary mx-auto mb-2" />
             <div className="text-2xl font-bold text-foreground">{validPrescriptions}</div>
-            <div className="text-body-sm text-muted-foreground">Currently Valid</div>
+            <div className="text-sm text-muted-foreground">Currently Valid</div>
           </CardContent>
         </Card>
       </div>
@@ -47,7 +49,7 @@ export function DoctorHome({ onNavigate, onIssuePrescription }: DoctorHomeProps)
       {/* Quick Actions */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-heading-3">Quick Actions</CardTitle>
+          <CardTitle className="text-lg">Quick Actions</CardTitle>
         </CardHeader>
         <CardContent className="space-y-3">
           <Button onClick={onIssuePrescription} className="w-full justify-start h-12" size="lg">
@@ -70,7 +72,7 @@ export function DoctorHome({ onNavigate, onIssuePrescription }: DoctorHomeProps)
       {/* Recent Activity */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-heading-3">Recent Prescriptions</CardTitle>
+          <CardTitle className="text-lg">Recent Prescriptions</CardTitle>
           <CardDescription>Latest issued prescriptions</CardDescription>
         </CardHeader>
         <CardContent className="space-y-3">
@@ -81,8 +83,8 @@ export function DoctorHome({ onNavigate, onIssuePrescription }: DoctorHomeProps)
                   <FileText className="h-5 w-5 text-secondary" />
                 </div>
                 <div>
-                  <div className="font-medium text-body-sm">{prescription.medicineName}</div>
-                  <div className="text-caption text-muted-foreground">
+                  <div className="font-medium text-sm">{prescription.medicineName}</div>
+                  <div className="text-xs text-muted-foreground">
                     Patient ID: {prescription.patientId} • Qty: {prescription.quantity}
                   </div>
                 </div>
@@ -99,7 +101,7 @@ export function DoctorHome({ onNavigate, onIssuePrescription }: DoctorHomeProps)
                 >
                   {prescription.status}
                 </Badge>
-                <div className="text-caption text-muted-foreground mt-1 flex items-center gap-1">
+                <div className="text-xs text-muted-foreground mt-1 flex items-center gap-1">
                   <Clock className="h-3 w-3" />
                   {new Date(prescription.issuedAt).toLocaleDateString()}
                 </div>
@@ -115,22 +117,22 @@ export function DoctorHome({ onNavigate, onIssuePrescription }: DoctorHomeProps)
       {/* Today's Summary */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-heading-3 flex items-center gap-2">
+          <CardTitle className="text-lg flex items-center gap-2">
             <TrendingUp className="h-5 w-5 text-primary" />
             Today's Summary
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-3">
           <div className="flex justify-between items-center">
-            <span className="text-body text-muted-foreground">Prescriptions issued today</span>
+            <span className="text-muted-foreground">Prescriptions issued today</span>
             <span className="font-bold text-lg">2</span>
           </div>
           <div className="flex justify-between items-center">
-            <span className="text-body text-muted-foreground">Expiring this week</span>
+            <span className="text-muted-foreground">Expiring this week</span>
             <span className="font-bold text-lg text-amber-600">{expiredPrescriptions}</span>
           </div>
           <div className="flex justify-between items-center">
-            <span className="text-body text-muted-foreground">Active patients</span>
+            <span className="text-muted-foreground">Active patients</span>
             <span className="font-bold text-lg">1</span>
           </div>
         </CardContent>

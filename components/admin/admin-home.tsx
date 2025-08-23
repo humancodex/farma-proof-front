@@ -4,14 +4,10 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Users, Building2, FileText, Activity, Search, Settings, Shield } from "lucide-react"
-import { useTranslation, type Language } from "@/lib/i18n"
+import { useI18n } from "@/lib/i18n"
 
-interface AdminHomeProps {
-  language: Language
-}
-
-export function AdminHome({ language }: AdminHomeProps) {
-  const { t } = useTranslation(language)
+export function AdminHome() {
+  const { t } = useI18n()
 
   const systemStats = {
     totalUsers: 1247,
@@ -39,8 +35,8 @@ export function AdminHome({ language }: AdminHomeProps) {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-heading-2 text-gray-900">{t("admin.dashboard")}</h1>
-          <p className="text-body text-gray-600">{t("admin.systemOverview")}</p>
+          <h1 className="text-2xl font-bold text-gray-900">{t("admin.dashboard")}</h1>
+          <p className="text-gray-600">{t("admin.systemOverview")}</p>
         </div>
         <Button className="bg-emerald-500 hover:bg-emerald-600">
           <Settings className="w-4 h-4 mr-2" />
@@ -55,7 +51,7 @@ export function AdminHome({ language }: AdminHomeProps) {
             <div className="flex items-center space-x-2">
               <Users className="w-5 h-5 text-emerald-500" />
               <div>
-                <p className="text-body-sm text-gray-600">{t("admin.totalUsers")}</p>
+                <p className="text-sm text-gray-600">{t("admin.totalUsers")}</p>
                 <p className="text-xl font-bold">{systemStats.totalUsers.toLocaleString()}</p>
               </div>
             </div>
@@ -67,7 +63,7 @@ export function AdminHome({ language }: AdminHomeProps) {
             <div className="flex items-center space-x-2">
               <Shield className="w-5 h-5 text-blue-500" />
               <div>
-                <p className="text-body-sm text-gray-600">{t("admin.activeDoctors")}</p>
+                <p className="text-sm text-gray-600">{t("admin.activeDoctors")}</p>
                 <p className="text-xl font-bold">{systemStats.activeDoctors}</p>
               </div>
             </div>
@@ -79,7 +75,7 @@ export function AdminHome({ language }: AdminHomeProps) {
             <div className="flex items-center space-x-2">
               <Building2 className="w-5 h-5 text-purple-500" />
               <div>
-                <p className="text-body-sm text-gray-600">{t("admin.activePharmacies")}</p>
+                <p className="text-sm text-gray-600">{t("admin.activePharmacies")}</p>
                 <p className="text-xl font-bold">{systemStats.activePharmacies}</p>
               </div>
             </div>
@@ -91,7 +87,7 @@ export function AdminHome({ language }: AdminHomeProps) {
             <div className="flex items-center space-x-2">
               <FileText className="w-5 h-5 text-orange-500" />
               <div>
-                <p className="text-body-sm text-gray-600">{t("admin.totalPrescriptions")}</p>
+                <p className="text-sm text-gray-600">{t("admin.totalPrescriptions")}</p>
                 <p className="text-xl font-bold">{systemStats.totalPrescriptions.toLocaleString()}</p>
               </div>
             </div>
@@ -103,7 +99,7 @@ export function AdminHome({ language }: AdminHomeProps) {
             <div className="flex items-center space-x-2">
               <Activity className="w-5 h-5 text-red-500" />
               <div>
-                <p className="text-body-sm text-gray-600">{t("admin.dailyTransactions")}</p>
+                <p className="text-sm text-gray-600">{t("admin.dailyTransactions")}</p>
                 <p className="text-xl font-bold">{systemStats.dailyTransactions}</p>
               </div>
             </div>
@@ -142,8 +138,8 @@ export function AdminHome({ language }: AdminHomeProps) {
                       </div>
                       <div>
                         <p className="font-medium">{user.name}</p>
-                        <p className="text-body-sm text-gray-600">
-                          {t(`role.${user.role}` as any)} • {t("admin.joined")} {user.joined}
+                        <p className="text-sm text-gray-600">
+                          {t(`roles.${user.role}`)} • {t("admin.joined")} {user.joined}
                         </p>
                       </div>
                     </div>

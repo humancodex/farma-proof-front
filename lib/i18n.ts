@@ -12,12 +12,22 @@ export const translations = {
     "common.edit": "Edit",
     "common.delete": "Delete",
     "common.view": "View",
+    "common.dashboard": "Dashboard",
 
     // Navigation
     "nav.home": "Home",
     "nav.wallet": "Wallet",
     "nav.orders": "Orders",
     "nav.profile": "Profile",
+    "nav.prescriptions": "Prescriptions",
+    "nav.patients": "Patients",
+    "nav.scan": "Scan Proof",
+    "nav.inventory": "Inventory",
+    "nav.dashboard": "Dashboard",
+    "nav.analytics": "Analytics",
+    "nav.reports": "Reports",
+    "nav.users": "Users",
+    "nav.system": "System",
 
     // Roles
     "role.patient": "Patient",
@@ -99,12 +109,22 @@ export const translations = {
     "common.edit": "Editar",
     "common.delete": "Eliminar",
     "common.view": "Ver",
+    "common.dashboard": "Panel",
 
     // Navigation
     "nav.home": "Inicio",
     "nav.wallet": "Cartera",
     "nav.orders": "Pedidos",
     "nav.profile": "Perfil",
+    "nav.prescriptions": "Recetas",
+    "nav.patients": "Pacientes",
+    "nav.scan": "Escanear Prueba",
+    "nav.inventory": "Inventario",
+    "nav.dashboard": "Panel",
+    "nav.analytics": "Analíticas",
+    "nav.reports": "Reportes",
+    "nav.users": "Usuarios",
+    "nav.system": "Sistema",
 
     // Roles
     "role.patient": "Paciente",
@@ -186,3 +206,5 @@ export function useTranslation(language: Language = "en") {
     language,
   }
 }
+
+export const useI18n = useTranslation
