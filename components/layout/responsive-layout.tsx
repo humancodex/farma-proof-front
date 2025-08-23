@@ -36,21 +36,21 @@ export function ResponsiveLayout({
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background w-full overflow-x-hidden">
       {/* Desktop Layout */}
       <div className="hidden lg:block">
         <DesktopSidebar activeTab={activeTab} onTabChange={onTabChange} language={language} />
         <DesktopHeader language={language} onLanguageChange={onLanguageChange} />
-        <main className="lg:pl-64 pt-0">
-          <div className="px-6 py-8 max-w-7xl mx-auto">{children}</div>
+        <main className="lg:pl-64 pt-0 w-full">
+          <div className="px-4 sm:px-6 py-8 max-w-7xl mx-auto">{children}</div>
         </main>
       </div>
 
-      {/* Mobile Layout */}
-      <div className="lg:hidden">
+      {/* Mobile/Tablet Layout */}
+      <div className="lg:hidden w-full">
         <TopHeader language={language} onLanguageChange={onLanguageChange} />
-        <main className="pb-20">
-          <div className="px-4 py-6">{children}</div>
+        <main className="pb-20 w-full">
+          <div className="px-4 sm:px-6 py-6">{children}</div>
         </main>
         <BottomNavigation activeTab={activeTab} onTabChange={onTabChange} />
         <FloatingCTA onClick={onFloatingCTAClick} />
