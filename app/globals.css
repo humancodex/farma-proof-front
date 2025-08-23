@@ -1,0 +1,177 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  /* Updated color tokens to match modern desktop design brief */
+  --background: #ffffff; /* Main background */
+  --foreground: #1f2937; /* Primary text color */
+  --card: #f9fafb; /* Card background */
+  --card-foreground: #4b5563; /* Card text color */
+  --popover: #ffffff; /* Popover background */
+  --popover-foreground: #1f2937; /* Popover text */
+  --primary: #1f2937; /* Primary actions */
+  --primary-foreground: #ffffff; /* Primary text */
+  --secondary: #8b5cf6; /* Secondary actions */
+  --secondary-foreground: #ffffff; /* Secondary text */
+  --muted: #f1f5f9; /* Muted background */
+  --muted-foreground: #6b7280; /* Muted text */
+  --accent: #8b5cf6; /* Accent elements */
+  --accent-foreground: #ffffff; /* Accent text */
+  --destructive: #be123c; /* Destructive actions */
+  --destructive-foreground: #ffffff; /* Destructive text */
+  --border: #e5e7eb; /* Border color */
+  --input: #f9fafb; /* Input background */
+  --ring: rgba(139, 92, 246, 0.5); /* Ring color for focus states */
+  --chart-1: #0891b2; /* Chart color 1 */
+  --chart-2: #be123c; /* Chart color 2 */
+  --chart-3: #1f2937; /* Chart color 3 */
+  --chart-4: #8b5cf6; /* Chart color 4 */
+  --chart-5: #ec4899; /* Chart color 5 */
+  --radius: 0.25rem; /* Corner rounding */
+  --sidebar: #f9fafb; /* Sidebar background */
+  --sidebar-foreground: #4b5563; /* Sidebar text */
+  --sidebar-primary: #1f2937; /* Sidebar primary background */
+  --sidebar-primary-foreground: #ffffff; /* Sidebar primary text */
+  --sidebar-accent: #8b5cf6; /* Sidebar accent */
+  --sidebar-accent-foreground: #ffffff; /* Sidebar accent text */
+  --sidebar-border: #e5e7eb; /* Sidebar border */
+  --sidebar-ring: rgba(139, 92, 246, 0.5); /* Sidebar focus ring */
+}
+
+.dark {
+  --background: #0f172a; /* Dark background */
+  --foreground: #f1f5f9; /* Light text */
+  --card: #1e293b; /* Dark card background */
+  --card-foreground: #f1f5f9; /* Light card text */
+  --popover: #1e293b; /* Dark popover background */
+  --popover-foreground: #f1f5f9; /* Light popover text */
+  --primary: #8b5cf6; /* Purple primary in dark mode */
+  --primary-foreground: #ffffff; /* White text on primary */
+  --secondary: #1f2937; /* Dark secondary */
+  --secondary-foreground: #f1f5f9; /* Light text on secondary */
+  --muted: #334155; /* Dark muted background */
+  --muted-foreground: #94a3b8; /* Light muted text */
+  --accent: #8b5cf6; /* Purple accent */
+  --accent-foreground: #ffffff; /* White accent text */
+  --destructive: #be123c; /* Red for errors */
+  --destructive-foreground: #ffffff; /* White error text */
+  --border: #334155; /* Dark border */
+  --input: #334155; /* Dark input background */
+  --ring: rgba(139, 92, 246, 0.5); /* Purple focus ring */
+  --sidebar: #1e293b; /* Dark sidebar */
+  --sidebar-foreground: #f1f5f9; /* Light sidebar text */
+  --sidebar-primary: #8b5cf6; /* Purple sidebar primary */
+  --sidebar-primary-foreground: #ffffff; /* White sidebar primary text */
+  --sidebar-accent: #334155; /* Dark sidebar accent */
+  --sidebar-accent-foreground: #f1f5f9; /* Light sidebar accent text */
+  --sidebar-border: #334155; /* Dark sidebar border */
+  --sidebar-ring: rgba(139, 92, 246, 0.5); /* Purple sidebar focus */
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+  /* Added desktop typography variables */
+  --font-heading: var(--font-playfair);
+  --font-body: var(--font-source-sans);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground font-sans;
+  }
+  /* Unified typography system with consistent heading hierarchy */
+  h1 {
+    @apply text-3xl font-bold;
+    font-family: var(--font-playfair);
+  }
+  h2 {
+    @apply text-2xl font-bold;
+    font-family: var(--font-playfair);
+  }
+  h3 {
+    @apply text-xl font-semibold;
+    font-family: var(--font-playfair);
+  }
+  h4 {
+    @apply text-lg font-semibold;
+    font-family: var(--font-source-sans);
+  }
+  h5,
+  h6 {
+    @apply text-base font-medium;
+    font-family: var(--font-source-sans);
+  }
+  p,
+  span,
+  div,
+  button,
+  input,
+  label {
+    font-family: var(--font-source-sans);
+  }
+  /* Consistent text size classes for better hierarchy */
+  .text-heading-1 {
+    @apply text-3xl font-bold;
+    font-family: var(--font-playfair);
+  }
+  .text-heading-2 {
+    @apply text-2xl font-bold;
+    font-family: var(--font-playfair);
+  }
+  .text-heading-3 {
+    @apply text-xl font-semibold;
+    font-family: var(--font-playfair);
+  }
+  .text-body-lg {
+    @apply text-lg font-normal;
+  }
+  .text-body {
+    @apply text-base font-normal;
+  }
+  .text-body-sm {
+    @apply text-sm font-normal;
+  }
+  .text-caption {
+    @apply text-xs font-normal;
+  }
+}
