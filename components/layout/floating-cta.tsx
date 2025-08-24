@@ -1,6 +1,6 @@
 "use client"
 
-import { Plus, FileText, Scan, UserPlus, Settings } from "lucide-react"
+import { Plus, FileText, Scan, Settings } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useAuth } from "@/lib/auth"
 
@@ -32,12 +32,6 @@ export function FloatingCTA({ onClick }: FloatingCTAProps) {
           icon: Scan,
           label: "Scan Proof",
           className: "bg-accent hover:bg-accent/90 text-accent-foreground",
-        }
-      case "auditor":
-        return {
-          icon: UserPlus,
-          label: "New Report",
-          className: "bg-primary hover:bg-primary/90 text-primary-foreground",
         }
       case "admin":
         return {

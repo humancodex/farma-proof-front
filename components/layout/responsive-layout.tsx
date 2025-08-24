@@ -9,14 +9,11 @@ import { BottomNavigation } from "./bottom-navigation"
 import { TopHeader } from "./top-header"
 import { FloatingCTA } from "./floating-cta"
 import { useAuth } from "@/lib/auth"
-import type { Language } from "@/lib/i18n"
 
 interface ResponsiveLayoutProps {
   children: React.ReactNode
   activeTab: string
   onTabChange: (tab: string) => void
-  language: Language
-  onLanguageChange: (lang: Language) => void
   onFloatingCTAClick: () => void
 }
 
@@ -24,8 +21,6 @@ export function ResponsiveLayout({
   children,
   activeTab,
   onTabChange,
-  language,
-  onLanguageChange,
   onFloatingCTAClick,
 }: ResponsiveLayoutProps) {
   const { user } = useAuth()
@@ -39,8 +34,8 @@ export function ResponsiveLayout({
     <div className="min-h-screen bg-background">
       {/* Desktop Layout */}
       <div className="hidden lg:block">
-        <DesktopSidebar activeTab={activeTab} onTabChange={onTabChange} language={language} />
-        <DesktopHeader language={language} onLanguageChange={onLanguageChange} />
+        <DesktopSidebar activeTab={activeTab} onTabChange={onTabChange} />
+        <DesktopHeader />
         <main className="lg:pl-64 pt-0">
           <div className="px-6 py-8 max-w-7xl mx-auto">{children}</div>
         </main>
@@ -48,7 +43,7 @@ export function ResponsiveLayout({
 
       {/* Mobile Layout */}
       <div className="lg:hidden">
-        <TopHeader language={language} onLanguageChange={onLanguageChange} />
+        <TopHeader />
         <main className="pb-20">
           <div className="px-4 py-6">{children}</div>
         </main>

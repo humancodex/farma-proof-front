@@ -15,7 +15,42 @@ import {
   type Medicine,
   type PrescriptionVC,
 } from "@/lib/demo-data"
-import { generateZKProof, payOnMidnight, type ZKProof } from "@/lib/zk-services"
+// Mock ZK proof interface for demo
+interface ZKProof {
+  id: string
+  vcId: string
+  medicineId: string
+  quantity: number
+  proofHash: string
+  isValid: boolean
+  generatedAt: string
+}
+
+// Mock functions for demo
+const generateZKProof = async (vcId: string, medicineId: string, quantity: number): Promise<ZKProof> => {
+  await new Promise(resolve => setTimeout(resolve, 2000))
+  return {
+    id: `proof-${Date.now()}`,
+    vcId,
+    medicineId,
+    quantity,
+    proofHash: `0x${Math.random().toString(16).substr(2, 32)}`,
+    isValid: true,
+    generatedAt: new Date().toISOString(),
+  }
+}
+
+const payOnMidnight = async (amount: number, proofId: string) => {
+  await new Promise(resolve => setTimeout(resolve, 1500))
+  return {
+    success: Math.random() > 0.1,
+    txHash: `0x${Math.random().toString(16).substr(2, 40)}`,
+    error: Math.random() > 0.1 ? undefined : "Payment failed. Please try again."
+  }
+}
+import { useFarma } from "@/src/hooks/useFarma"
+import { Status } from "@/packages/types/prescription"
+import { PrescriptionStatusManager } from "@/src/lib/prescriptionStatus"
 
 interface PurchaseFlowProps {
   onComplete: () => void
@@ -34,6 +69,10 @@ export function PurchaseFlow({ onComplete, onCancel }: PurchaseFlowProps) {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState("")
   const [txHash, setTxHash] = useState("")
+  const [useRealBackend, setUseRealBackend] = useState(false) // Toggle for real vs demo
+  
+  // Real FarmaProof integration
+  const { patientPurchase, isLoading: farmaLoading, currentOrder } = useFarma()
 
   const steps = [
     { id: "pharmacy", label: "Select Pharmacy", icon: MapPin },
@@ -47,6 +86,48 @@ export function PurchaseFlow({ onComplete, onCancel }: PurchaseFlowProps) {
   const progress = ((currentStepIndex + 1) / steps.length) * 100
 
   const validVCs = DEMO_PRESCRIPTION_VCS.filter((vc) => vc.status === "valid")
+
+  // Real FarmaProof purchase function
+  const handleRealPurchase = async () => {
+    if (!selectedMedicine || !selectedVC || !selectedPharmacy) return
+
+    try {
+      setIsLoading(true)
+      setError("")
+
+      // Generate medicine code hash (in real implementation, this would come from the VC)
+      const medicineCodeHash = `0x${Buffer.from(selectedMedicine.id).toString('hex').padStart(64, '0')}` as `0x${string}`
+      
+      // Mock issuer policy hash and patient binding (these would come from the VC in real implementation)
+      const issuerPolicyHash = `0x${'1'.repeat(64)}` as `0x${string}`
+      const patientBinding = `0x${'2'.repeat(64)}` as `0x${string}`
+
+      const result = await patientPurchase({
+        medicineCodeHash,
+        qty: quantity,
+        issuerPolicyHash,
+        patientBinding,
+      })
+
+      if (result.state === 'paid') {
+        setTxHash(result.txHash || '')
+        
+        // Update prescription status to paid
+        if (selectedVC?.id) {
+          await PrescriptionStatusManager.updateStatus(selectedVC.id, Status.paid)
+          console.log(`Prescription ${selectedVC.id} status changed to: paid`)
+        }
+        
+        setCurrentStep('receipt')
+      } else if (result.state === 'error') {
+        setError(result.error || 'Purchase failed')
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Purchase failed')
+    } finally {
+      setIsLoading(false)
+    }
+  }
 
   const handleNext = async () => {
     setError("")
@@ -72,13 +153,26 @@ export function PurchaseFlow({ onComplete, onCancel }: PurchaseFlowProps) {
           }
           break
         case "payment":
-          if (zkProof && selectedMedicine) {
-            const result = await payOnMidnight(selectedMedicine.price * quantity, zkProof.id)
-            if (result.success && result.txHash) {
-              setTxHash(result.txHash)
-              setCurrentStep("receipt")
-            } else {
-              setError(result.error || "Payment failed")
+          if (useRealBackend) {
+            // Use real FarmaProof backend
+            await handleRealPurchase()
+          } else {
+            // Use demo implementation
+            if (zkProof && selectedMedicine) {
+              const result = await payOnMidnight(selectedMedicine.price * quantity, zkProof.id)
+              if (result.success && result.txHash) {
+                setTxHash(result.txHash)
+                
+                // Update prescription status to paid (demo mode)
+                if (selectedVC?.id) {
+                  await PrescriptionStatusManager.updateStatus(selectedVC.id, Status.paid)
+                  console.log(`Demo prescription ${selectedVC.id} status changed to: paid`)
+                }
+                
+                setCurrentStep("receipt")
+              } else {
+                setError(result.error || "Payment failed")
+              }
             }
           }
           break
@@ -130,6 +224,15 @@ export function PurchaseFlow({ onComplete, onCancel }: PurchaseFlowProps) {
           <p className="text-sm text-muted-foreground">
             Step {currentStepIndex + 1} of {steps.length}
           </p>
+        </div>
+        <div className="flex items-center gap-2">
+          <Button
+            variant={useRealBackend ? "default" : "outline"}
+            size="sm"
+            onClick={() => setUseRealBackend(!useRealBackend)}
+          >
+            {useRealBackend ? "Real" : "Demo"}
+          </Button>
         </div>
       </div>
 

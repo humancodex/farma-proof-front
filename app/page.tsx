@@ -7,6 +7,7 @@ import { PatientHome } from "@/components/patient/patient-home"
 import { PrescriptionWallet } from "@/components/patient/prescription-wallet"
 import { PurchaseFlow } from "@/components/patient/purchase-flow"
 import { OrdersList } from "@/components/patient/orders-list"
+import { PayPrescription } from "@/components/patient/pay-prescription"
 import { DoctorHome } from "@/components/doctor/doctor-home"
 import { IssuePrescriptionForm } from "@/components/doctor/issue-prescription-form"
 import { PrescriptionsList } from "@/components/doctor/prescriptions-list"
@@ -15,28 +16,33 @@ import { PharmacyHome } from "@/components/pharmacy/pharmacy-home"
 import { ProofScanner } from "@/components/pharmacy/proof-scanner"
 import { InventoryManagement } from "@/components/pharmacy/inventory-management"
 import { OrdersManagement } from "@/components/pharmacy/orders-management"
+
 import { AdminHome } from "@/components/admin/admin-home"
-import { AuditorHome } from "@/components/auditor/auditor-home"
+import { WalletUI } from "@/components/wallet/wallet-ui"
 import { useAuth } from "@/lib/auth"
-import type { Language } from "@/lib/i18n"
 
 export default function HomePage() {
+
   const { user } = useAuth()
   const [activeTab, setActiveTab] = useState("home")
-  const [language, setLanguage] = useState<Language>("en")
   const [showPurchaseFlow, setShowPurchaseFlow] = useState(false)
   const [showIssuePrescription, setShowIssuePrescription] = useState(false)
   const [showProofScanner, setShowProofScanner] = useState(false)
 
+  // Early return if no user
+  if (!user) {
+    return <LoginScreen />
+  }
+
   const handleFloatingCTA = () => {
-    if (user?.role === "patient") {
+    if (user.role === "patient") {
       setShowPurchaseFlow(true)
-    } else if (user?.role === "doctor") {
+    } else if (user.role === "doctor") {
       setShowIssuePrescription(true)
-    } else if (user?.role === "pharmacy") {
+    } else if (user.role === "pharmacy") {
       setShowProofScanner(true)
     }
-    console.log("Floating CTA clicked for role:", user?.role)
+    console.log("Floating CTA clicked for role:", user.role)
   }
 
   const handleStartPurchase = () => {
@@ -84,25 +90,7 @@ export default function HomePage() {
   }
 
   const renderPatientContent = () => {
-    switch (activeTab) {
-      case "home":
-        return <PatientHome onNavigate={setActiveTab} onStartPurchase={handleStartPurchase} />
-      case "wallet":
-        return <PrescriptionWallet onGenerateProof={handleGenerateProof} />
-      case "orders":
-        return <OrdersList />
-      case "profile":
-        return (
-          <div className="text-center py-12 lg:py-16">
-            <div className="max-w-md mx-auto">
-              <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-4">Profile</h2>
-              <p className="text-muted-foreground text-lg">Profile management coming soon</p>
-            </div>
-          </div>
-        )
-      default:
-        return <PatientHome onNavigate={setActiveTab} onStartPurchase={handleStartPurchase} />
-    }
+    return <PatientHome onNavigate={() => {}} onStartPurchase={() => {}} />
   }
 
   const renderDoctorContent = () => {
@@ -111,87 +99,26 @@ export default function HomePage() {
         return <DoctorHome onNavigate={setActiveTab} onIssuePrescription={handleIssuePrescription} />
       case "prescriptions":
         return <PrescriptionsList />
-      case "patients":
-        return <PatientsList />
-      case "profile":
-        return (
-          <div className="text-center py-12 lg:py-16">
-            <div className="max-w-md mx-auto">
-              <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-4">Profile</h2>
-              <p className="text-muted-foreground text-lg">Profile management coming soon</p>
-            </div>
-          </div>
-        )
       default:
         return <DoctorHome onNavigate={setActiveTab} onIssuePrescription={handleIssuePrescription} />
     }
   }
 
   const renderPharmacyContent = () => {
-    switch (activeTab) {
-      case "home":
-        return <PharmacyHome onNavigate={setActiveTab} onScanProof={handleScanProof} />
-      case "scan":
-        return <OrdersManagement />
-      case "inventory":
-        return <InventoryManagement />
-      case "profile":
-        return (
-          <div className="text-center py-12 lg:py-16">
-            <div className="max-w-md mx-auto">
-              <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-4">Profile</h2>
-              <p className="text-muted-foreground text-lg">Profile management coming soon</p>
-            </div>
-          </div>
-        )
-      default:
-        return <PharmacyHome onNavigate={setActiveTab} onScanProof={handleScanProof} />
-    }
+    return <PharmacyHome />
   }
 
   const renderAdminContent = () => {
-    switch (activeTab) {
-      case "home":
-        return <AdminHome />
-      case "users":
-        return <AdminHome />
-      case "system":
-        return <AdminHome />
-      case "profile":
-        return (
-          <div className="text-center py-12 lg:py-16">
-            <div className="max-w-md mx-auto">
-              <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-4">Profile</h2>
-              <p className="text-muted-foreground text-lg">Profile management coming soon</p>
-            </div>
-          </div>
-        )
-      default:
-        return <AdminHome />
-    }
+    return (
+      <div className="text-center py-12 lg:py-16">
+        <div className="max-w-md mx-auto">
+          <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-4">Admin Interface</h2>
+          <p className="text-muted-foreground text-lg">Coming soon</p>
+        </div>
+      </div>
+    )
   }
 
-  const renderAuditorContent = () => {
-    switch (activeTab) {
-      case "home":
-        return <AuditorHome />
-      case "analytics":
-        return <AuditorHome />
-      case "reports":
-        return <AuditorHome />
-      case "profile":
-        return (
-          <div className="text-center py-12 lg:py-16">
-            <div className="max-w-md mx-auto">
-              <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-4">Profile</h2>
-              <p className="text-muted-foreground text-lg">Profile management coming soon</p>
-            </div>
-          </div>
-        )
-      default:
-        return <AuditorHome />
-    }
-  }
 
   const renderContent = () => {
     if (user.role === "patient") {
@@ -202,8 +129,6 @@ export default function HomePage() {
       return renderPharmacyContent()
     } else if (user.role === "admin") {
       return renderAdminContent()
-    } else if (user.role === "auditor") {
-      return renderAuditorContent()
     }
 
     return (
@@ -215,10 +140,6 @@ export default function HomePage() {
         </div>
       </div>
     )
-  }
-
-  if (!user) {
-    return <LoginScreen language={language} onLanguageChange={setLanguage} />
   }
 
   // Show purchase flow overlay for patients
@@ -258,8 +179,6 @@ export default function HomePage() {
     <ResponsiveLayout
       activeTab={activeTab}
       onTabChange={setActiveTab}
-      language={language}
-      onLanguageChange={setLanguage}
       onFloatingCTAClick={handleFloatingCTA}
     >
       {renderContent()}
