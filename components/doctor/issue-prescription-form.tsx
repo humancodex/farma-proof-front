@@ -13,27 +13,32 @@ import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Badge } from "@/components/ui/badge"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { DEMO_MEDICINES } from "@/lib/demo-data"
+import { PrescriptionVC, Status } from "@/packages/types/prescription"
 
 interface IssuePrescriptionFormProps {
   onComplete: () => void
   onCancel: () => void
 }
 
-interface PrescriptionData {
+interface FormData {
   patientPseudonym: string
+  patientWallet: string
   medicineId: string
   quantity: number
   dosage: string
+  healthInsurance: string
   notes: string
   expiryDays: number
 }
 
 export function IssuePrescriptionForm({ onComplete, onCancel }: IssuePrescriptionFormProps) {
-  const [formData, setFormData] = useState<PrescriptionData>({
+  const [formData, setFormData] = useState<FormData>({
     patientPseudonym: "",
+    patientWallet: "",
     medicineId: "",
     quantity: 1,
     dosage: "",
+    healthInsurance: "",
     notes: "",
     expiryDays: 90,
   })
@@ -47,6 +52,12 @@ export function IssuePrescriptionForm({ onComplete, onCancel }: IssuePrescriptio
 
     if (!formData.patientPseudonym.trim()) {
       newErrors.patientPseudonym = "Patient pseudonym is required"
+    }
+    if (!formData.patientWallet.trim()) {
+      newErrors.patientWallet = "Patient wallet address is required"
+    }
+    if (!formData.healthInsurance.trim()) {
+      newErrors.healthInsurance = "Health insurance information is required"
     }
     if (!formData.medicineId) {
       newErrors.medicineId = "Please select a medicine"
@@ -79,25 +90,24 @@ export function IssuePrescriptionForm({ onComplete, onCancel }: IssuePrescriptio
       await new Promise((resolve) => setTimeout(resolve, 2000))
 
       const selectedMedicine = DEMO_MEDICINES.find((med) => med.id === formData.medicineId)
-      const issuedAt = new Date()
-      const expiresAt = new Date(issuedAt.getTime() + formData.expiryDays * 24 * 60 * 60 * 1000)
+      const issuedAt = Date.now()
+      const expiresAt = issuedAt + (formData.expiryDays * 24 * 60 * 60 * 1000)
 
-      const newVC = {
+      const newVC: PrescriptionVC = {
         id: `vc-${Date.now()}`,
-        patientId: formData.patientPseudonym,
-        doctorId: "doctor-1",
-        doctorName: "Dr. Rivera",
-        medicineId: formData.medicineId,
-        medicineName: selectedMedicine?.name || "",
-        quantity: formData.quantity,
+        drugName: selectedMedicine?.name || "",
         dosage: formData.dosage,
-        issuedAt: issuedAt.toISOString(),
-        expiresAt: expiresAt.toISOString(),
-        status: "valid" as const,
+        quantity: formData.quantity,
+        healthInsurance: formData.healthInsurance,
+        doctorWallet: `0x${Math.random().toString(16).substr(2, 40)}`, // Mock doctor wallet
+        patientWallet: formData.patientWallet,
+        issuedAt: issuedAt,
+        expiresAt: expiresAt,
+        status: Status.init, // Initial status when prescription is created
         vcHash: `0x${Math.random().toString(16).substr(2, 32)}`,
         notes: formData.notes,
       }
-
+      console.log("newVerifiableCredential", newVC)
       setVcData(newVC)
       setIsIssued(true)
     } catch (error) {
@@ -107,16 +117,19 @@ export function IssuePrescriptionForm({ onComplete, onCancel }: IssuePrescriptio
     }
   }
 
+  //TODO SEND THIS TO THE USER WALLET AND SAVE IT TO THE DATABASE
   const handleShare = () => {
     if (navigator.share && vcData) {
       navigator.share({
         title: "Digital Prescription",
-        text: `Prescription for ${vcData.medicineName} - ${vcData.quantity} tablets`,
-        url: `farmaproof://prescription/${vcData.id}`,
+        text: `Prescription for ${vcData.drugName} - ${vcData.quantity} tablets - Status: ${vcData.status}`,
+        url: window.location.origin,
       })
     } else {
       // Fallback: copy to clipboard
-      navigator.clipboard.writeText(`Prescription ID: ${vcData?.id}\nVC Hash: ${vcData?.vcHash}`)
+      navigator.clipboard.writeText(
+        `Prescription ID: ${vcData?.id}\nDrug: ${vcData?.drugName}\nQuantity: ${vcData?.quantity}\nStatus: ${vcData?.status}\nVC Hash: ${vcData?.vcHash}`
+      )
     }
   }
 
@@ -157,12 +170,12 @@ export function IssuePrescriptionForm({ onComplete, onCancel }: IssuePrescriptio
           <CardContent className="space-y-4">
             <div className="grid grid-cols-2 gap-4 text-sm">
               <div>
-                <span className="text-muted-foreground">Patient:</span>
-                <div className="font-medium">{vcData.patientId}</div>
+                <span className="text-muted-foreground">Patient Wallet:</span>
+                <div className="font-medium font-mono text-xs">{vcData.patientWallet}</div>
               </div>
               <div>
                 <span className="text-muted-foreground">Medicine:</span>
-                <div className="font-medium">{vcData.medicineName}</div>
+                <div className="font-medium">{vcData.drugName}</div>
               </div>
               <div>
                 <span className="text-muted-foreground">Quantity:</span>
@@ -170,7 +183,15 @@ export function IssuePrescriptionForm({ onComplete, onCancel }: IssuePrescriptio
               </div>
               <div>
                 <span className="text-muted-foreground">Status:</span>
-                <Badge variant="default">Valid</Badge>
+                <Badge variant="secondary">{vcData.status}</Badge>
+              </div>
+              <div>
+                <span className="text-muted-foreground">Health Insurance:</span>
+                <div className="font-medium">{vcData.healthInsurance}</div>
+              </div>
+              <div>
+                <span className="text-muted-foreground">Doctor Wallet:</span>
+                <div className="font-medium font-mono text-xs">{vcData.doctorWallet}</div>
               </div>
             </div>
 
@@ -182,6 +203,11 @@ export function IssuePrescriptionForm({ onComplete, onCancel }: IssuePrescriptio
             <div className="space-y-2">
               <span className="text-muted-foreground text-sm">Expires:</span>
               <div className="font-medium">{new Date(vcData.expiresAt).toLocaleDateString()}</div>
+            </div>
+
+            <div className="space-y-2">
+              <span className="text-muted-foreground text-sm">Issued:</span>
+              <div className="font-medium">{new Date(vcData.issuedAt).toLocaleString()}</div>
             </div>
 
             <div className="space-y-2">
@@ -251,6 +277,32 @@ export function IssuePrescriptionForm({ onComplete, onCancel }: IssuePrescriptio
               />
               {errors.patientPseudonym && <p className="text-sm text-destructive">{errors.patientPseudonym}</p>}
               <p className="text-xs text-muted-foreground">Use a privacy-preserving identifier for the patient</p>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="patientWallet">Patient Wallet Address *</Label>
+              <Input
+                id="patientWallet"
+                placeholder="Enter patient wallet address (e.g., 0x123...abc)"
+                value={formData.patientWallet}
+                onChange={(e) => setFormData({ ...formData, patientWallet: e.target.value })}
+                className={errors.patientWallet ? "border-destructive" : ""}
+              />
+              {errors.patientWallet && <p className="text-sm text-destructive">{errors.patientWallet}</p>}
+              <p className="text-xs text-muted-foreground">Patient's blockchain wallet address for receiving the prescription</p>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="healthInsurance">Health Insurance *</Label>
+              <Input
+                id="healthInsurance"
+                placeholder="Enter health insurance provider or ID"
+                value={formData.healthInsurance}
+                onChange={(e) => setFormData({ ...formData, healthInsurance: e.target.value })}
+                className={errors.healthInsurance ? "border-destructive" : ""}
+              />
+              {errors.healthInsurance && <p className="text-sm text-destructive">{errors.healthInsurance}</p>}
+              <p className="text-xs text-muted-foreground">Patient's health insurance information for coverage verification</p>
             </div>
           </CardContent>
         </Card>

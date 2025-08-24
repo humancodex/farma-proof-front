@@ -28,15 +28,20 @@ export default function HomePage() {
   const [showIssuePrescription, setShowIssuePrescription] = useState(false)
   const [showProofScanner, setShowProofScanner] = useState(false)
 
+  // Early return if no user
+  if (!user) {
+    return <LoginScreen language={language} onLanguageChange={setLanguage} />
+  }
+
   const handleFloatingCTA = () => {
-    if (user?.role === "patient") {
+    if (user.role === "patient") {
       setShowPurchaseFlow(true)
-    } else if (user?.role === "doctor") {
+    } else if (user.role === "doctor") {
       setShowIssuePrescription(true)
-    } else if (user?.role === "pharmacy") {
+    } else if (user.role === "pharmacy") {
       setShowProofScanner(true)
     }
-    console.log("Floating CTA clicked for role:", user?.role)
+    console.log("Floating CTA clicked for role:", user.role)
   }
 
   const handleStartPurchase = () => {
@@ -215,10 +220,6 @@ export default function HomePage() {
         </div>
       </div>
     )
-  }
-
-  if (!user) {
-    return <LoginScreen language={language} onLanguageChange={setLanguage} />
   }
 
   // Show purchase flow overlay for patients

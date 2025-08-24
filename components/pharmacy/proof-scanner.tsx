@@ -9,6 +9,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { verifyZKProof } from "@/lib/zk-services"
 import { DEMO_ORDERS, DEMO_PRESCRIPTION_VCS, DEMO_MEDICINES } from "@/lib/demo-data"
+import { useFarma } from "@/src/hooks/useFarma"
+import { Status } from "@/packages/types/prescription"
+import { PrescriptionStatusManager } from "@/src/lib/prescriptionStatus"
 
 interface ProofScannerProps {
   onComplete: () => void
@@ -28,9 +31,71 @@ export function ProofScanner({ onComplete, onCancel }: ProofScannerProps) {
     medicine?: any
     error?: string
   } | null>(null)
+  const [useRealBackend, setUseRealBackend] = useState(false)
+  
+  // Real FarmaProof integration
+  const { pharmacyFulfill, getOrderStatus } = useFarma()
+
+  const handleRealScanProof = async () => {
+    if (!proofId.trim()) return
+
+    setIsLoading(true)
+    setCurrentStep("verify")
+
+    try {
+      // For real backend, proofId would be an order ID
+      const orderStatus = await getOrderStatus(proofId)
+      
+      if (!orderStatus) {
+        setVerificationResult({
+          isValid: false,
+          error: "Order not found or invalid",
+        })
+        setCurrentStep("details")
+        return
+      }
+
+      // Check if order is in PAID state (ready for fulfillment) or PROOF_VALID (needs payment)
+      const isValid = orderStatus.chainState === 'PAID' || orderStatus.chainState === 'PROOF_VALID'
+      
+      // If order is valid and not yet verified, mark as verified by pharmacy
+      if (isValid && orderStatus.state === 'PROOF_VALID') {
+        await PrescriptionStatusManager.updateStatus(orderStatus.id, Status.verified)
+        console.log(`Prescription ${orderStatus.id} status changed to: verified`)
+      }
+
+      setVerificationResult({
+        isValid,
+        order: {
+          id: orderStatus.id,
+          quantity: orderStatus.qty_requested,
+          medicineCodeHash: orderStatus.medicine_code_hash,
+          state: orderStatus.state,
+          totalPrice: orderStatus.qty_requested * 50, // Mock price
+          prescriptionStatus: orderStatus.chainState === 'PAID' ? Status.paid : Status.verified,
+        },
+        error: !isValid ? `Order not ready for fulfillment. Status: ${orderStatus.state}` : undefined,
+      })
+
+      setCurrentStep("details")
+    } catch (error) {
+      setVerificationResult({
+        isValid: false,
+        error: "Failed to verify order status",
+      })
+      setCurrentStep("details")
+    } finally {
+      setIsLoading(false)
+    }
+  }
 
   const handleScanProof = async () => {
     if (!proofId.trim()) {
+      return
+    }
+
+    if (useRealBackend) {
+      await handleRealScanProof()
       return
     }
 
@@ -83,23 +148,57 @@ export function ProofScanner({ onComplete, onCancel }: ProofScannerProps) {
     setCurrentStep("fulfill")
 
     try {
-      // Simulate fulfillment process
-      await new Promise((resolve) => setTimeout(resolve, 2000))
-
-      // In a real app, this would update the order status
-      console.log("Order fulfilled:", verificationResult?.order?.id)
+      if (useRealBackend && verificationResult?.order?.id) {
+        // Use real FarmaProof backend
+        const result = await pharmacyFulfill(verificationResult.order.id)
+        
+        if (!result.success) {
+          setVerificationResult(prev => ({
+            ...prev!,
+            error: result.error || "Fulfillment failed"
+          }))
+          setCurrentStep("details")
+          return
+        }
+        
+        // Update prescription status to delivered
+        await PrescriptionStatusManager.updateStatus(verificationResult.order.id, Status.delivered)
+        console.log("Real order fulfilled:", result.txHash)
+        console.log(`Prescription ${verificationResult.order.id} status changed to: delivered`)
+      } else {
+        // Simulate fulfillment process
+        await new Promise((resolve) => setTimeout(resolve, 2000))
+        
+        // Update demo prescription status to delivered
+        if (verificationResult?.order?.id) {
+          await PrescriptionStatusManager.updateStatus(verificationResult.order.id, Status.delivered)
+          console.log(`Demo prescription ${verificationResult.order.id} status changed to: delivered`)
+        }
+        
+        console.log("Demo order fulfilled:", verificationResult?.order?.id)
+      }
 
       onComplete()
     } catch (error) {
       console.error("Fulfillment error:", error)
+      setVerificationResult(prev => ({
+        ...prev!,
+        error: "Fulfillment failed"
+      }))
+      setCurrentStep("details")
     } finally {
       setIsLoading(false)
     }
   }
 
   const handleManualEntry = () => {
-    // For demo, use a known proof ID
-    setProofId("proof-abc123")
+    if (useRealBackend) {
+      // For real backend, use an integer order ID
+      setProofId("1")
+    } else {
+      // For demo, use a known proof ID
+      setProofId("proof-abc123")
+    }
   }
 
   return (
@@ -112,6 +211,15 @@ export function ProofScanner({ onComplete, onCancel }: ProofScannerProps) {
         <div className="flex-1">
           <h2 className="text-xl font-bold text-foreground font-[family-name:var(--font-work-sans)]">Scan ZK Proof</h2>
           <p className="text-sm text-muted-foreground">Verify customer prescription proof</p>
+        </div>
+        <div className="flex items-center gap-2">
+          <Button
+            variant={useRealBackend ? "default" : "outline"}
+            size="sm"
+            onClick={() => setUseRealBackend(!useRealBackend)}
+          >
+            {useRealBackend ? "Real" : "Demo"}
+          </Button>
         </div>
       </div>
 
@@ -148,12 +256,12 @@ export function ProofScanner({ onComplete, onCancel }: ProofScannerProps) {
                   <Label htmlFor="proofId">Proof ID</Label>
                   <Input
                     id="proofId"
-                    placeholder="Enter proof ID (e.g., proof-abc123)"
+                    placeholder={useRealBackend ? "Enter order ID (e.g., 1)" : "Enter proof ID (e.g., proof-abc123)"}
                     value={proofId}
                     onChange={(e) => setProofId(e.target.value)}
                   />
                   <Button onClick={handleManualEntry} variant="outline" size="sm" className="w-full bg-transparent">
-                    Use Demo Proof ID
+                    {useRealBackend ? "Use Test Order ID" : "Use Demo Proof ID"}
                   </Button>
                 </div>
               </CardContent>
