@@ -14,6 +14,7 @@ import { Badge } from "@/components/ui/badge"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { DEMO_MEDICINES } from "@/lib/demo-data"
 import { PrescriptionVC, Status } from "@/packages/types/prescription"
+import { simpleStore } from "@/src/lib/simple-store"
 
 interface IssuePrescriptionFormProps {
   onComplete: () => void
@@ -87,28 +88,32 @@ export function IssuePrescriptionForm({ onComplete, onCancel }: IssuePrescriptio
     setIsLoading(true)
 
     try {
-      // Simulate VC generation
-      await new Promise((resolve) => setTimeout(resolve, 2000))
-
       const selectedMedicine = DEMO_MEDICINES.find((med) => med.id === formData.medicineId)
-      const issuedAt = Date.now()
-      const expiresAt = issuedAt + (formData.expiryDays * 24 * 60 * 60 * 1000)
+      
+      // Create prescription in store
+      const prescriptionId = simpleStore.createPrescription({
+        patientWallet: formData.patientWallet,
+        drugName: selectedMedicine?.name || "",
+        dosage: formData.dosage,
+        quantity: formData.quantity,
+        doctorWallet: "0x1234567890123456789012345678901234567890"
+      })
 
       const newVC: PrescriptionVC = {
-        id: `vc-${Date.now()}`,
+        id: prescriptionId,
         drugName: selectedMedicine?.name || "",
         dosage: formData.dosage,
         quantity: formData.quantity,
         healthInsurance: formData.healthInsurance,
-        doctorWallet: `0x${Math.random().toString(16).substr(2, 40)}`, // Mock doctor wallet
+        doctorWallet: "0x1234567890123456789012345678901234567890",
         patientWallet: formData.patientWallet,
-        issuedAt: issuedAt,
-        expiresAt: expiresAt,
-        status: Status.init, // Initial status when prescription is created
-        vcHash: `0x${Math.random().toString(16).substr(2, 32)}`,
+        issuedAt: Date.now(),
+        expiresAt: Date.now() + (formData.expiryDays * 24 * 60 * 60 * 1000),
+        status: Status.init,
+        vcHash: `0x${prescriptionId}`,
         notes: formData.notes,
       }
-      console.log("newVerifiableCredential", newVC)
+      
       setVcData(newVC)
       setIsIssued(true)
     } catch (error) {

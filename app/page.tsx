@@ -7,6 +7,7 @@ import { PatientHome } from "@/components/patient/patient-home"
 import { PrescriptionWallet } from "@/components/patient/prescription-wallet"
 import { PurchaseFlow } from "@/components/patient/purchase-flow"
 import { OrdersList } from "@/components/patient/orders-list"
+import { PayPrescription } from "@/components/patient/pay-prescription"
 import { DoctorHome } from "@/components/doctor/doctor-home"
 import { IssuePrescriptionForm } from "@/components/doctor/issue-prescription-form"
 import { PrescriptionsList } from "@/components/doctor/prescriptions-list"
@@ -15,6 +16,7 @@ import { PharmacyHome } from "@/components/pharmacy/pharmacy-home"
 import { ProofScanner } from "@/components/pharmacy/proof-scanner"
 import { InventoryManagement } from "@/components/pharmacy/inventory-management"
 import { OrdersManagement } from "@/components/pharmacy/orders-management"
+import { VerifyProof } from "@/components/pharmacy/verify-proof"
 import { AdminHome } from "@/components/admin/admin-home"
 import { WalletUI } from "@/components/wallet/wallet-ui"
 import { useAuth } from "@/lib/auth"
@@ -96,7 +98,7 @@ export default function HomePage() {
       case "wallet-dashboard":
         return <WalletUI />
       case "orders":
-        return <OrdersList />
+        return <PayPrescription />
       case "profile":
         return (
           <div className="text-center py-12 lg:py-16">
@@ -138,7 +140,7 @@ export default function HomePage() {
       case "home":
         return <PharmacyHome onNavigate={setActiveTab} onScanProof={handleScanProof} />
       case "scan":
-        return <OrdersManagement />
+        return <VerifyProof />
       case "inventory":
         return <InventoryManagement />
       case "wallet-dashboard":
