@@ -40,7 +40,7 @@ export async function POST(request: NextRequest) {
 
 export async function GET(request: NextRequest) {
   try {
-    const searchParams = request.nextUrl.searchParams;
+    const Params = request.nextUrl.Params;
     const orderId = searchParams.get('id');
 
     if (!orderId) {

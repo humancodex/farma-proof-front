@@ -1,57 +1,34 @@
 "use client"
 
-import { Bell, Search, Menu } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
+import { Heart } from "lucide-react"
 import { RoleSwitcher } from "@/components/auth/role-switcher"
-import { useAuth } from "@/lib/auth"
 
 interface DesktopHeaderProps {
   onMenuToggle?: () => void
 }
 
 export function DesktopHeader({ onMenuToggle }: DesktopHeaderProps) {
-  const { user } = useAuth()
-
   return (
     <header className="lg:pl-64 bg-background border-b border-border sticky top-0 z-30">
       <div className="flex items-center justify-between px-6 py-4">
-        {/* Mobile menu button */}
-        <Button variant="ghost" size="sm" onClick={onMenuToggle} className="lg:hidden">
-          <Menu className="h-5 w-5" />
-        </Button>
-
-        {/* Search Bar - Desktop Only */}
-        <div className="hidden lg:flex lg:flex-1 lg:max-w-lg">
-          <div className="relative w-full">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input placeholder="Search" className="pl-10 bg-muted/50 border-0 focus-visible:ring-1" />
+        {/* Logo - Left Side */}
+        <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
+            <div className="relative">
+              <Heart className="h-8 w-8 text-primary fill-primary" />
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="w-2 h-2 bg-white rounded-full" />
+              </div>
+            </div>
+            <div>
+              <h1 className="text-lg font-bold text-foreground">FarmaProof</h1>
+              <p className="text-xs text-muted-foreground">Secure Prescriptions</p>
+            </div>
           </div>
         </div>
 
-        {/* Header Actions */}
-        <div className="flex items-center gap-3">
-          {/* Quick Stats - Desktop Only */}
-          {user && (
-            <div className="hidden xl:flex items-center gap-6 mr-6">
-              <div className="text-center">
-                <p className="text-2xl font-bold text-primary">24</p>
-                <p className="text-xs text-muted-foreground">Today</p>
-              </div>
-              <div className="text-center">
-                <p className="text-2xl font-bold text-secondary">156</p>
-                <p className="text-xs text-muted-foreground">Total</p>
-              </div>
-            </div>
-          )}
-
-          {/* Notifications */}
-          <Button variant="ghost" size="sm" className="h-9 w-9 p-0 relative">
-            <Bell className="h-4 w-4" />
-            <div className="absolute -top-1 -right-1 w-2 h-2 bg-destructive rounded-full" />
-          </Button>
-
-          {/* Role Switcher */}
+        {/* Role Switcher - Right Side */}
+        <div className="flex items-center">
           <RoleSwitcher />
         </div>
       </div>
