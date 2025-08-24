@@ -93,21 +93,8 @@ export default function HomePage() {
     switch (activeTab) {
       case "home":
         return <PatientHome onNavigate={setActiveTab} onStartPurchase={handleStartPurchase} />
-      case "wallet":
-        return <PrescriptionWallet onGenerateProof={handleGenerateProof} />
-      case "wallet-dashboard":
-        return <WalletUI />
       case "orders":
         return <PayPrescription />
-      case "profile":
-        return (
-          <div className="text-center py-12 lg:py-16">
-            <div className="max-w-md mx-auto">
-              <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-4">Profile</h2>
-              <p className="text-muted-foreground text-lg">Profile management coming soon</p>
-            </div>
-          </div>
-        )
       default:
         return <PatientHome onNavigate={setActiveTab} onStartPurchase={handleStartPurchase} />
     }
@@ -119,17 +106,6 @@ export default function HomePage() {
         return <DoctorHome onNavigate={setActiveTab} onIssuePrescription={handleIssuePrescription} />
       case "prescriptions":
         return <PrescriptionsList />
-      case "patients":
-        return <PatientsList />
-      case "profile":
-        return (
-          <div className="text-center py-12 lg:py-16">
-            <div className="max-w-md mx-auto">
-              <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-4">Profile</h2>
-              <p className="text-muted-foreground text-lg">Profile management coming soon</p>
-            </div>
-          </div>
-        )
       default:
         return <DoctorHome onNavigate={setActiveTab} onIssuePrescription={handleIssuePrescription} />
     }
@@ -141,46 +117,20 @@ export default function HomePage() {
         return <PharmacyHome onNavigate={setActiveTab} onScanProof={handleScanProof} />
       case "scan":
         return <VerifyProof />
-      case "inventory":
-        return <InventoryManagement />
-      case "wallet-dashboard":
-        return <WalletUI />
-      case "profile":
-        return (
-          <div className="text-center py-12 lg:py-16">
-            <div className="max-w-md mx-auto">
-              <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-4">Profile</h2>
-              <p className="text-muted-foreground text-lg">Profile management coming soon</p>
-            </div>
-          </div>
-        )
       default:
         return <PharmacyHome onNavigate={setActiveTab} onScanProof={handleScanProof} />
     }
   }
 
   const renderAdminContent = () => {
-    switch (activeTab) {
-      case "home":
-        return <AdminHome />
-      case "users":
-        return <AdminHome />
-      case "system":
-        return <AdminHome />
-      case "wallet-dashboard":
-        return <WalletUI />
-      case "profile":
-        return (
-          <div className="text-center py-12 lg:py-16">
-            <div className="max-w-md mx-auto">
-              <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-4">Profile</h2>
-              <p className="text-muted-foreground text-lg">Profile management coming soon</p>
-            </div>
-          </div>
-        )
-      default:
-        return <AdminHome />
-    }
+    return (
+      <div className="text-center py-12 lg:py-16">
+        <div className="max-w-md mx-auto">
+          <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-4">Admin Interface</h2>
+          <p className="text-muted-foreground text-lg">Coming soon</p>
+        </div>
+      </div>
+    )
   }
 
 

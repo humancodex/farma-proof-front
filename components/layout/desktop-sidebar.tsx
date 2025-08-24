@@ -19,31 +19,20 @@ export function DesktopSidebar({ activeTab, onTabChange }: DesktopSidebarProps) 
       case "patient":
         return [
           { id: "home", label: "Home", icon: Home },
-          { id: "wallet", label: "Wallet", icon: Wallet },
-          { id: "orders", label: "Orders", icon: ShoppingBag },
-          { id: "profile", label: "Profile", icon: User },
+          { id: "orders", label: "My Prescriptions", icon: FileText },
         ]
       case "doctor":
         return [
           { id: "home", label: "Home", icon: Home },
           { id: "prescriptions", label: "Prescriptions", icon: FileText },
-          { id: "patients", label: "Patients", icon: User },
-          { id: "profile", label: "Profile", icon: User },
         ]
       case "pharmacy":
         return [
           { id: "home", label: "Home", icon: Home },
-          { id: "scan", label: "Scan Proof", icon: Scan },
-          { id: "inventory", label: "Inventory", icon: ShoppingBag },
-          { id: "profile", label: "Profile", icon: User },
+          { id: "scan", label: "Verify Proofs", icon: Scan },
         ]
       case "admin":
-        return [
-          { id: "home", label: "Dashboard", icon: Home },
-          { id: "users", label: "Users", icon: User },
-          { id: "system", label: "System", icon: Settings },
-          { id: "profile", label: "Profile", icon: User },
-        ]
+        return []
       default:
         return []
     }

@@ -7,10 +7,12 @@ import { Badge } from '@/components/ui/badge';
 import { simpleStore } from '@/src/lib/simple-store';
 import { useMidnight } from '@/components/providers/midnight-provider';
 
+
 export function PayPrescription() {
   const { connect, isConnected, address } = useMidnight();
   const [prescriptions, setPrescriptions] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+
 
   useEffect(() => {
     if (address) {
@@ -32,31 +34,24 @@ export function PayPrescription() {
     
     setIsLoading(true);
     try {
-      // Check for Midnight wallet extension
+      // Try real Midnight wallet first
       const midnight = (window as any).midnight;
-      console.log('Available wallets:', { midnight, cardano: (window as any).cardano });
-      
       let txHash;
       
       if (midnight?.mnLace) {
-        // Real Midnight wallet transaction
         const api = await midnight.mnLace.enable();
-        console.log('Midnight API methods:', Object.keys(api));
         
-        // Try different API methods based on actual wallet implementation
-        if (api.sendTx) {
-          txHash = await api.sendTx({
-            to: 'mn_shield-addr_test1gpztte8j9ww3tpyjcq6dg3pv6zveq029ncfx8ashlc0992x2agyqxq8ae4s9sumzaxlmyxwyxkutcftu70kazfrrx00twndcr8euwwr3h5zpz8v9',
-            amount: '50',
-            asset: 'tDust'
-          });
-        } else if (api.transfer) {
-          txHash = await api.transfer('mn_shield-addr_test1gpztte8j9ww3tpyjcq6dg3pv6zveq029ncfx8ashlc0992x2agyqxq8ae4s9sumzaxlmyxwyxkutcftu70kazfrrx00twndcr8euwwr3h5zpz8v9', 50);
-        } else {
-          throw new Error('No supported transfer method found');
-        }
+        // Create transfer using wallet SDK
+        const transferRecipe = await api.transferTransaction([{
+          amount: 50,
+          type: { tag: 'native' },
+          receiverAddress: 'mn_shield-addr_test1gpztte8j9ww3tpyjcq6dg3pv6zveq029ncfx8ashlc0992x2agyqxq8ae4s9sumzaxlmyxwyxkutcftu70kazfrrx00twndcr8euwwr3h5zpz8v9'
+        }]);
+        
+        const provenTx = await api.proveTransaction(transferRecipe);
+        txHash = await api.submitTransaction(provenTx);
       } else {
-        // Mock for demo
+        // Mock payment fallback
         await new Promise(resolve => setTimeout(resolve, 2000));
         txHash = `0x${Date.now().toString(16)}${Math.random().toString(16).slice(2, 10)}`;
       }
