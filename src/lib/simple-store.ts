@@ -5,21 +5,23 @@ interface Prescription {
   dosage: string;
   quantity: number;
   doctorWallet: string;
+  isVerified: boolean;
   isPaid: boolean;
   proofHash?: string;
-  isVerified: boolean;
+  createdAt: number;
 }
 
 class SimpleStore {
   private prescriptions: Prescription[] = [];
 
-  createPrescription(data: Omit<Prescription, 'id' | 'isPaid' | 'isVerified'>): string {
+  createPrescription(data: Omit<Prescription, 'id' | 'isPaid' | 'isVerified' | 'createdAt'>): string {
     const id = Date.now().toString();
     this.prescriptions.push({
       ...data,
       id,
+      isVerified: false,
       isPaid: false,
-      isVerified: false
+      createdAt: Date.now()
     });
     return id;
   }
@@ -30,14 +32,18 @@ class SimpleStore {
 
   payPrescription(id: string, proofHash: string): void {
     const prescription = this.prescriptions.find(p => p.id === id);
-    if (prescription) {
+    if (prescription && prescription.isVerified) {
       prescription.isPaid = true;
       prescription.proofHash = proofHash;
     }
   }
 
-  getPaidPrescriptions(): Prescription[] {
-    return this.prescriptions.filter(p => p.isPaid && !p.isVerified);
+  getUnverifiedPrescriptions(): Prescription[] {
+    return this.prescriptions.filter(p => !p.isVerified);
+  }
+
+  getVerifiedUnpaidPrescriptions(): Prescription[] {
+    return this.prescriptions.filter(p => p.isVerified && !p.isPaid);
   }
 
   verifyPrescription(id: string): void {
@@ -49,6 +55,10 @@ class SimpleStore {
 
   getPrescription(id: string): Prescription | undefined {
     return this.prescriptions.find(p => p.id === id);
+  }
+
+  getAll(): Prescription[] {
+    return this.prescriptions;
   }
 }
 

@@ -1,6 +1,6 @@
 'use client';
 
-import { WalletBuilder } from '@midnight-ntwrk/wallet';
+import { WalletBuilder } from '@midnight-ntwrk/wallet-api';
 import { NetworkId } from '@midnight-ntwrk/zswap';
 
 // Import the contract

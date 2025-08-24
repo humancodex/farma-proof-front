@@ -16,7 +16,7 @@ import { PharmacyHome } from "@/components/pharmacy/pharmacy-home"
 import { ProofScanner } from "@/components/pharmacy/proof-scanner"
 import { InventoryManagement } from "@/components/pharmacy/inventory-management"
 import { OrdersManagement } from "@/components/pharmacy/orders-management"
-import { VerifyProof } from "@/components/pharmacy/verify-proof"
+
 import { AdminHome } from "@/components/admin/admin-home"
 import { WalletUI } from "@/components/wallet/wallet-ui"
 import { useAuth } from "@/lib/auth"
@@ -90,14 +90,7 @@ export default function HomePage() {
   }
 
   const renderPatientContent = () => {
-    switch (activeTab) {
-      case "home":
-        return <PatientHome onNavigate={setActiveTab} onStartPurchase={handleStartPurchase} />
-      case "orders":
-        return <PayPrescription />
-      default:
-        return <PatientHome onNavigate={setActiveTab} onStartPurchase={handleStartPurchase} />
-    }
+    return <PatientHome onNavigate={() => {}} onStartPurchase={() => {}} />
   }
 
   const renderDoctorContent = () => {
@@ -112,14 +105,7 @@ export default function HomePage() {
   }
 
   const renderPharmacyContent = () => {
-    switch (activeTab) {
-      case "home":
-        return <PharmacyHome onNavigate={setActiveTab} onScanProof={handleScanProof} />
-      case "scan":
-        return <VerifyProof />
-      default:
-        return <PharmacyHome onNavigate={setActiveTab} onScanProof={handleScanProof} />
-    }
+    return <PharmacyHome />
   }
 
   const renderAdminContent = () => {

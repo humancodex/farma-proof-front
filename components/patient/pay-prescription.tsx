@@ -98,16 +98,30 @@ export function PayPrescription() {
           <CardHeader>
             <div className="flex justify-between items-start">
               <CardTitle className="text-lg">{prescription.drugName}</CardTitle>
-              <Badge variant={prescription.isPaid ? 'default' : 'secondary'}>
-                {prescription.isPaid ? 'Paid' : 'Unpaid'}
-              </Badge>
+              <div className="flex gap-2">
+                <Badge variant={prescription.isVerified ? 'default' : 'secondary'}>
+                  {prescription.isVerified ? 'Verified' : 'Pending Verification'}
+                </Badge>
+                {prescription.isVerified && (
+                  <Badge variant={prescription.isPaid ? 'default' : 'outline'}>
+                    {prescription.isPaid ? 'Paid' : 'Unpaid'}
+                  </Badge>
+                )}
+              </div>
             </div>
           </CardHeader>
           <CardContent className="space-y-2">
             <p><strong>Dosage:</strong> {prescription.dosage}</p>
             <p><strong>Quantity:</strong> {prescription.quantity}</p>
             <p><strong>Price:</strong> 50 tDust</p>
-            {!prescription.isPaid && (
+            {!prescription.isVerified && (
+              <div className="mt-4 p-2 bg-yellow-50 rounded">
+                <p className="text-sm text-yellow-700">
+                  Please visit the pharmacy to verify this prescription before payment.
+                </p>
+              </div>
+            )}
+            {prescription.isVerified && !prescription.isPaid && (
               <Button 
                 onClick={() => handlePay(prescription.id)} 
                 disabled={isLoading}

@@ -1,10 +1,11 @@
-"use client"
+'use client';
 
-import { ShoppingBag, Wallet, Clock, MapPin, Plus } from "lucide-react"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { DEMO_PRESCRIPTION_VCS, DEMO_ORDERS } from "@/lib/demo-data"
+import { useState, useEffect } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { simpleStore } from '@/src/lib/simple-store';
+import { useMidnight } from '@/components/providers/midnight-provider';
 
 interface PatientHomeProps {
   onNavigate: (tab: string) => void
@@ -12,131 +13,106 @@ interface PatientHomeProps {
 }
 
 export function PatientHome({ onNavigate, onStartPurchase }: PatientHomeProps) {
-  const validVCs = DEMO_PRESCRIPTION_VCS.filter((vc) => vc.status === "valid")
-  const recentOrders = DEMO_ORDERS.slice(0, 2)
+  const { connect, isConnected, address } = useMidnight();
+  const [prescriptions, setPrescriptions] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    if (address) {
+      const userPrescriptions = simpleStore.getPrescriptionsByPatient(address);
+      setPrescriptions(userPrescriptions);
+    }
+  }, [address]);
+
+  const handleConnect = async () => {
+    try {
+      await connect();
+    } catch (error) {
+      console.error('Failed to connect wallet:', error);
+    }
+  };
+
+  const handlePay = async (prescriptionId: string) => {
+    if (!isConnected || !address) return;
+    
+    setIsLoading(true);
+    try {
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      const txHash = `0x${Date.now().toString(16)}`;
+      
+      simpleStore.payPrescription(prescriptionId, txHash);
+      
+      const updated = simpleStore.getPrescriptionsByPatient(address);
+      setPrescriptions(updated);
+      
+      alert(`Payment Successful!\nTransaction: ${txHash}`);
+    } catch (error) {
+      console.error('Payment failed:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  if (!isConnected) {
+    return (
+      <div className="space-y-6">
+        <h1 className="text-2xl font-bold">My Prescriptions</h1>
+        <Card>
+          <CardContent className="p-6 text-center">
+            <p className="mb-4">Connect your wallet to view prescriptions</p>
+            <Button onClick={handleConnect}>Connect Wallet</Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  const activePrescriptions = prescriptions.filter(p => !p.isPaid);
+  const totalPrescriptions = prescriptions.length;
 
   return (
     <div className="space-y-6">
-      {/* Welcome Section */}
-      <div className="text-center">
-        <h2 className="text-2xl font-bold text-foreground mb-2">Your prescriptions, protected</h2>
-        <p className="text-muted-foreground">Secure medicine access with zero-knowledge verification</p>
+      <h1 className="text-2xl font-bold">My Prescriptions</h1>
+      
+      {/* Prescriptions */}
+      <div className="space-y-4">
+        {prescriptions.map((prescription) => (
+          <Card key={prescription.id}>
+            <CardHeader>
+              <div className="flex justify-between items-start">
+                <CardTitle className="text-lg">{prescription.drugName}</CardTitle>
+                <Badge variant={prescription.isPaid ? 'default' : 'secondary'}>
+                  {prescription.isPaid ? 'Paid' : 'Unpaid'}
+                </Badge>
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-2">
+              <p><strong>Dosage:</strong> {prescription.dosage}</p>
+              <p><strong>Quantity:</strong> {prescription.quantity}</p>
+              <p><strong>Price:</strong> 50 tDust</p>
+              {!prescription.isPaid && (
+                <Button 
+                  onClick={() => handlePay(prescription.id)} 
+                  disabled={isLoading}
+                  className="w-full mt-4"
+                >
+                  {isLoading ? 'Processing...' : 'Pay 50 tDust'}
+                </Button>
+              )}
+            </CardContent>
+          </Card>
+        ))}
+        {prescriptions.length === 0 && (
+          <Card>
+            <CardContent className="p-8 text-center">
+              <p className="text-muted-foreground">No prescriptions yet</p>
+              <p className="text-sm text-muted-foreground mt-2">
+                Prescriptions from your doctor will appear here
+              </p>
+            </CardContent>
+          </Card>
+        )}
       </div>
-
-      {/* Quick Stats */}
-      <div className="grid grid-cols-2 gap-4">
-        <Card>
-          <CardContent className="p-4 text-center">
-            <Wallet className="h-8 w-8 text-primary mx-auto mb-2" />
-            <div className="text-2xl font-bold text-foreground">{validVCs.length}</div>
-            <div className="text-sm text-muted-foreground">Valid Prescriptions</div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="p-4 text-center">
-            <ShoppingBag className="h-8 w-8 text-secondary mx-auto mb-2" />
-            <div className="text-2xl font-bold text-foreground">{DEMO_ORDERS.length}</div>
-            <div className="text-sm text-muted-foreground">Total Orders</div>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Quick Actions */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-lg">Quick Actions</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-3">
-          <Button onClick={onStartPurchase} className="w-full justify-start h-12" size="lg">
-            <Plus className="mr-3 h-5 w-5" />
-            Buy Medicine
-          </Button>
-          <div className="grid grid-cols-2 gap-3">
-            <Button variant="outline" onClick={() => onNavigate("wallet")} className="justify-start">
-              <Wallet className="mr-2 h-4 w-4" />
-              My Wallet
-            </Button>
-            <Button variant="outline" onClick={() => onNavigate("orders")} className="justify-start">
-              <ShoppingBag className="mr-2 h-4 w-4" />
-              My Orders
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Recent Orders */}
-      {recentOrders.length > 0 && (
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-lg">Recent Orders</CardTitle>
-            <CardDescription>Your latest medicine purchases</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            {recentOrders.map((order) => (
-              <div key={order.id} className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center">
-                    <ShoppingBag className="h-5 w-5 text-primary" />
-                  </div>
-                  <div>
-                    <div className="font-medium text-sm">{order.medicineName}</div>
-                    <div className="text-xs text-muted-foreground flex items-center gap-1">
-                      <MapPin className="h-3 w-3" />
-                      {order.pharmacyName}
-                    </div>
-                  </div>
-                </div>
-                <div className="text-right">
-                  <Badge
-                    variant={
-                      order.status === "fulfilled" ? "default" : order.status === "paid" ? "secondary" : "outline"
-                    }
-                  >
-                    {order.status.replace("_", " ")}
-                  </Badge>
-                  <div className="text-xs text-muted-foreground mt-1">${order.totalPrice}</div>
-                </div>
-              </div>
-            ))}
-            <Button variant="ghost" onClick={() => onNavigate("orders")} className="w-full">
-              View All Orders
-            </Button>
-          </CardContent>
-        </Card>
-      )}
-
-      {/* Active Prescriptions Preview */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-lg">Active Prescriptions</CardTitle>
-          <CardDescription>Valid credentials ready for use</CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-3">
-          {validVCs.slice(0, 2).map((vc) => (
-            <div key={vc.id} className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-secondary/10 rounded-lg flex items-center justify-center">
-                  <Wallet className="h-5 w-5 text-secondary" />
-                </div>
-                <div>
-                  <div className="font-medium text-sm">{vc.medicineName}</div>
-                  <div className="text-xs text-muted-foreground">by {vc.doctorName}</div>
-                </div>
-              </div>
-              <div className="text-right">
-                <Badge variant="default">Valid</Badge>
-                <div className="text-xs text-muted-foreground mt-1 flex items-center gap-1">
-                  <Clock className="h-3 w-3" />
-                  {new Date(vc.expiresAt).toLocaleDateString()}
-                </div>
-              </div>
-            </div>
-          ))}
-          <Button variant="ghost" onClick={() => onNavigate("wallet")} className="w-full">
-            View All Prescriptions
-          </Button>
-        </CardContent>
-      </Card>
     </div>
-  )
+  );
 }
