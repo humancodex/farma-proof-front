@@ -4,10 +4,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Users, Building2, FileText, Activity, Search, Settings, Shield } from "lucide-react"
-import { useI18n } from "@/lib/i18n"
-
 export function AdminHome() {
-  const { t } = useI18n()
 
   const systemStats = {
     totalUsers: 1247,
@@ -35,12 +32,12 @@ export function AdminHome() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">{t("admin.dashboard")}</h1>
-          <p className="text-gray-600">{t("admin.systemOverview")}</p>
+          <h1 className="text-2xl font-bold text-gray-900">Admin Dashboard</h1>
+          <p className="text-gray-600">System overview and management</p>
         </div>
         <Button className="bg-emerald-500 hover:bg-emerald-600">
           <Settings className="w-4 h-4 mr-2" />
-          {t("admin.settings")}
+          Settings
         </Button>
       </div>
 
@@ -51,7 +48,7 @@ export function AdminHome() {
             <div className="flex items-center space-x-2">
               <Users className="w-5 h-5 text-emerald-500" />
               <div>
-                <p className="text-sm text-gray-600">{t("admin.totalUsers")}</p>
+                <p className="text-sm text-gray-600">Total Users</p>
                 <p className="text-xl font-bold">{systemStats.totalUsers.toLocaleString()}</p>
               </div>
             </div>
@@ -63,7 +60,7 @@ export function AdminHome() {
             <div className="flex items-center space-x-2">
               <Shield className="w-5 h-5 text-blue-500" />
               <div>
-                <p className="text-sm text-gray-600">{t("admin.activeDoctors")}</p>
+                <p className="text-sm text-gray-600">Active Doctors</p>
                 <p className="text-xl font-bold">{systemStats.activeDoctors}</p>
               </div>
             </div>
@@ -75,7 +72,7 @@ export function AdminHome() {
             <div className="flex items-center space-x-2">
               <Building2 className="w-5 h-5 text-purple-500" />
               <div>
-                <p className="text-sm text-gray-600">{t("admin.activePharmacies")}</p>
+                <p className="text-sm text-gray-600">Active Pharmacies</p>
                 <p className="text-xl font-bold">{systemStats.activePharmacies}</p>
               </div>
             </div>
@@ -87,7 +84,7 @@ export function AdminHome() {
             <div className="flex items-center space-x-2">
               <FileText className="w-5 h-5 text-orange-500" />
               <div>
-                <p className="text-sm text-gray-600">{t("admin.totalPrescriptions")}</p>
+                <p className="text-sm text-gray-600">Total Prescriptions</p>
                 <p className="text-xl font-bold">{systemStats.totalPrescriptions.toLocaleString()}</p>
               </div>
             </div>
@@ -99,7 +96,7 @@ export function AdminHome() {
             <div className="flex items-center space-x-2">
               <Activity className="w-5 h-5 text-red-500" />
               <div>
-                <p className="text-sm text-gray-600">{t("admin.dailyTransactions")}</p>
+                <p className="text-sm text-gray-600">Daily Transactions</p>
                 <p className="text-xl font-bold">{systemStats.dailyTransactions}</p>
               </div>
             </div>
@@ -110,18 +107,18 @@ export function AdminHome() {
       {/* Main Content Tabs */}
       <Tabs defaultValue="users" className="space-y-4">
         <TabsList className="grid w-full grid-cols-3">
-          <TabsTrigger value="users">{t("admin.userManagement")}</TabsTrigger>
-          <TabsTrigger value="analytics">{t("admin.analytics")}</TabsTrigger>
-          <TabsTrigger value="alerts">{t("admin.systemAlerts")}</TabsTrigger>
+          <TabsTrigger value="users">User Management</TabsTrigger>
+          <TabsTrigger value="analytics">Analytics</TabsTrigger>
+          <TabsTrigger value="alerts">System Alerts</TabsTrigger>
         </TabsList>
 
         <TabsContent value="users" className="space-y-4">
           <Card>
             <CardHeader>
               <div className="flex items-center justify-between">
-                <CardTitle>{t("admin.recentUsers")}</CardTitle>
+                <CardTitle>Recent Users</CardTitle>
                 <div className="flex items-center space-x-2">
-                  <Input placeholder={t("admin.searchUsers")} className="w-64" />
+                  <Input placeholder="Search users..." className="w-64" />
                   <Button variant="outline" size="sm">
                     <Search className="w-4 h-4" />
                   </Button>
@@ -139,16 +136,16 @@ export function AdminHome() {
                       <div>
                         <p className="font-medium">{user.name}</p>
                         <p className="text-sm text-gray-600">
-                          {t(`roles.${user.role}`)} • {t("admin.joined")} {user.joined}
+                          {user.role} • joined {user.joined}
                         </p>
                       </div>
                     </div>
                     <div className="flex items-center space-x-2">
                       <Badge variant={user.status === "active" ? "default" : "secondary"}>
-                        {t(`admin.status.${user.status}`)}
+                        {user.status}
                       </Badge>
                       <Button variant="outline" size="sm">
-                        {t("admin.manage")}
+                        Manage
                       </Button>
                     </div>
                   </div>
@@ -162,22 +159,22 @@ export function AdminHome() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Card>
               <CardHeader>
-                <CardTitle>{t("admin.prescriptionTrends")}</CardTitle>
+                <CardTitle>Prescription Trends</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="h-48 bg-gray-50 rounded-lg flex items-center justify-center">
-                  <p className="text-gray-500">{t("admin.chartPlaceholder")}</p>
+                  <p className="text-gray-500">Chart visualization coming soon</p>
                 </div>
               </CardContent>
             </Card>
 
             <Card>
               <CardHeader>
-                <CardTitle>{t("admin.userGrowth")}</CardTitle>
+                <CardTitle>User Growth</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="h-48 bg-gray-50 rounded-lg flex items-center justify-center">
-                  <p className="text-gray-500">{t("admin.chartPlaceholder")}</p>
+                  <p className="text-gray-500">Chart visualization coming soon</p>
                 </div>
               </CardContent>
             </Card>
@@ -187,7 +184,7 @@ export function AdminHome() {
         <TabsContent value="alerts" className="space-y-4">
           <Card>
             <CardHeader>
-              <CardTitle>{t("admin.systemAlerts")}</CardTitle>
+              <CardTitle>System Alerts</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
@@ -207,7 +204,7 @@ export function AdminHome() {
                       <p className="text-sm text-gray-600">{alert.time}</p>
                     </div>
                     <Button variant="outline" size="sm">
-                      {t("admin.resolve")}
+                      Resolve
                     </Button>
                   </div>
                 ))}

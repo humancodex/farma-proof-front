@@ -1,20 +1,16 @@
 "use client"
 
-import { Globe, Bell, Search, Menu } from "lucide-react"
+import { Bell, Search, Menu } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { RoleSwitcher } from "@/components/auth/role-switcher"
-import { useTranslation, type Language } from "@/lib/i18n"
 import { useAuth } from "@/lib/auth"
 
 interface DesktopHeaderProps {
-  language: Language
-  onLanguageChange: (lang: Language) => void
   onMenuToggle?: () => void
 }
 
-export function DesktopHeader({ language, onLanguageChange, onMenuToggle }: DesktopHeaderProps) {
-  const { t } = useTranslation(language)
+export function DesktopHeader({ onMenuToggle }: DesktopHeaderProps) {
   const { user } = useAuth()
 
   return (
@@ -29,7 +25,7 @@ export function DesktopHeader({ language, onLanguageChange, onMenuToggle }: Desk
         <div className="hidden lg:flex lg:flex-1 lg:max-w-lg">
           <div className="relative w-full">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input placeholder={t("common.search")} className="pl-10 bg-muted/50 border-0 focus-visible:ring-1" />
+            <Input placeholder="Search" className="pl-10 bg-muted/50 border-0 focus-visible:ring-1" />
           </div>
         </div>
 
@@ -40,24 +36,14 @@ export function DesktopHeader({ language, onLanguageChange, onMenuToggle }: Desk
             <div className="hidden xl:flex items-center gap-6 mr-6">
               <div className="text-center">
                 <p className="text-2xl font-bold text-primary">24</p>
-                <p className="text-xs text-muted-foreground">{t("common.today")}</p>
+                <p className="text-xs text-muted-foreground">Today</p>
               </div>
               <div className="text-center">
                 <p className="text-2xl font-bold text-secondary">156</p>
-                <p className="text-xs text-muted-foreground">{t("common.total")}</p>
+                <p className="text-xs text-muted-foreground">Total</p>
               </div>
             </div>
           )}
-
-          {/* Language Toggle */}
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => onLanguageChange(language === "en" ? "es" : "en")}
-            className="h-9 w-9 p-0"
-          >
-            <Globe className="h-4 w-4" />
-          </Button>
 
           {/* Notifications */}
           <Button variant="ghost" size="sm" className="h-9 w-9 p-0 relative">
@@ -66,7 +52,7 @@ export function DesktopHeader({ language, onLanguageChange, onMenuToggle }: Desk
           </Button>
 
           {/* Role Switcher */}
-          <RoleSwitcher language={language} />
+          <RoleSwitcher />
         </div>
       </div>
     </header>

@@ -30,19 +30,24 @@ const useWallet = () => {
     
     setConnecting(true)
     try {
-      // @ts-expect-error: window.midnight is injected by wallet extension
-      const api = await window.midnight?.[walletName]?.enable()
-      console.log("Wallet API available:", api)
-      
-      setWalletApi(api)
-      setConnected(true)
-      
-      try {
-        const state = await api.state()
-        console.log('Wallet state', state)
-        setAddress(state.address)
-      } catch (error) {
-        console.log('Error getting wallet state:', error)
+      if (typeof window !== 'undefined' && window.midnight?.[walletName]) {
+        const api = await window.midnight[walletName].enable()
+        console.log("Wallet API available:", api)
+        
+        if (api) {
+          setWalletApi(api)
+          setConnected(true)
+          
+          try {
+            const state = await api.state()
+            console.log('Wallet state', state)
+            setAddress(state.address)
+          } catch (error) {
+            console.log('Error getting wallet state:', error)
+          }
+        }
+      } else {
+        throw new Error('Wallet not available')
       }
     } catch (error) {
       console.log("Error connecting to wallet:", error)

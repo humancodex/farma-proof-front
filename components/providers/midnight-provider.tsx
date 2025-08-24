@@ -39,7 +39,6 @@ export function MidnightProvider({ children }: { children: ReactNode }) {
   const connect = useCallback(async () => {
     try {
       if (typeof window !== 'undefined' && window.midnight?.mnLace) {
-        // @ts-expect-error: window.midnight is injected by wallet extension
         const api = await window.midnight.mnLace.enable()
         if (api) {
           const state = await api.state()

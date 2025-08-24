@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useState, useEffect, type ReactNode } from "react"
 
-export type UserRole = "patient" | "doctor" | "pharmacy" | "auditor" | "admin"
+export type UserRole = "patient" | "doctor" | "pharmacy" | "admin"
 
 export interface User {
   id: string
@@ -42,13 +42,6 @@ export const DEMO_USERS: Record<UserRole, User> = {
     name: "Andes Pharmacy",
     email: "contact@andespharmacy.com",
     role: "pharmacy",
-    verified: true,
-  },
-  auditor: {
-    id: "auditor-1",
-    name: "System Auditor",
-    email: "auditor@farmaproof.com",
-    role: "auditor",
     verified: true,
   },
   admin: {

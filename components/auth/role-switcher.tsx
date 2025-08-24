@@ -11,15 +11,16 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Badge } from "@/components/ui/badge"
 import { useAuth, DEMO_USERS, type UserRole } from "@/lib/auth"
-import { useTranslation, type Language } from "@/lib/i18n"
 
-interface RoleSwitcherProps {
-  language: Language
+const roleLabels: Record<UserRole, string> = {
+  patient: "Patient",
+  doctor: "Doctor", 
+  pharmacy: "Pharmacy",
+  admin: "Admin"
 }
 
-export function RoleSwitcher({ language }: RoleSwitcherProps) {
+export function RoleSwitcher() {
   const { user, switchRole, logout } = useAuth()
-  const { t } = useTranslation(language)
 
   if (!user) return null
 
@@ -34,7 +35,7 @@ export function RoleSwitcher({ language }: RoleSwitcherProps) {
             <div className="text-left">
               <div className="text-sm font-medium">{user.name}</div>
               <Badge variant="secondary" className="text-xs">
-                {t(`role.${user.role}` as any)}
+                {roleLabels[user.role]}
               </Badge>
             </div>
           </div>
@@ -56,7 +57,7 @@ export function RoleSwitcher({ language }: RoleSwitcherProps) {
               </div>
               <div>
                 <div className="text-sm font-medium">{demoUser.name}</div>
-                <div className="text-xs text-muted-foreground">{t(`role.${role}` as any)}</div>
+                <div className="text-xs text-muted-foreground">{roleLabels[role as UserRole]}</div>
               </div>
             </div>
           </DropdownMenuItem>

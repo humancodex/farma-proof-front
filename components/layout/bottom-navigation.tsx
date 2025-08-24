@@ -38,13 +38,6 @@ export function BottomNavigation({ activeTab, onTabChange }: BottomNavigationPro
           { id: "inventory", label: "Inventory", icon: ShoppingBag },
           { id: "profile", label: "Profile", icon: User },
         ]
-      case "auditor":
-        return [
-          { id: "home", label: "Dashboard", icon: Home },
-          { id: "analytics", label: "Analytics", icon: BarChart3 },
-          { id: "reports", label: "Reports", icon: FileText },
-          { id: "profile", label: "Profile", icon: User },
-        ]
       case "admin":
         return [
           { id: "home", label: "Dashboard", icon: Home },

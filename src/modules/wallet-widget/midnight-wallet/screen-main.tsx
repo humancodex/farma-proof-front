@@ -7,7 +7,7 @@ const useWallet = () => ({
   connectWallet: (key: string) => console.log("Wallet provider unavailable", key)
 })
 
-const useWalletList = () => []
+const useWalletList = () => [] as { name: string }[]
 import WalletIcon from './wallet-icon';
 import { type JSX } from 'react';
 

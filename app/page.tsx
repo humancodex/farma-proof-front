@@ -16,23 +16,20 @@ import { ProofScanner } from "@/components/pharmacy/proof-scanner"
 import { InventoryManagement } from "@/components/pharmacy/inventory-management"
 import { OrdersManagement } from "@/components/pharmacy/orders-management"
 import { AdminHome } from "@/components/admin/admin-home"
-import { AuditorHome } from "@/components/auditor/auditor-home"
 import { WalletUI } from "@/components/wallet/wallet-ui"
 import { useAuth } from "@/lib/auth"
-import type { Language } from "@/lib/i18n"
 
 export default function HomePage() {
 
   const { user } = useAuth()
   const [activeTab, setActiveTab] = useState("home")
-  const [language, setLanguage] = useState<Language>("en")
   const [showPurchaseFlow, setShowPurchaseFlow] = useState(false)
   const [showIssuePrescription, setShowIssuePrescription] = useState(false)
   const [showProofScanner, setShowProofScanner] = useState(false)
 
   // Early return if no user
   if (!user) {
-    return <LoginScreen language={language} onLanguageChange={setLanguage} />
+    return <LoginScreen />
   }
 
   const handleFloatingCTA = () => {
@@ -184,29 +181,6 @@ export default function HomePage() {
     }
   }
 
-  const renderAuditorContent = () => {
-    switch (activeTab) {
-      case "home":
-        return <AuditorHome />
-      case "analytics":
-        return <AuditorHome />
-      case "reports":
-        return <AuditorHome />
-      case "wallet-dashboard":
-        return <WalletUI />
-      case "profile":
-        return (
-          <div className="text-center py-12 lg:py-16">
-            <div className="max-w-md mx-4">
-              <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-4">Profile</h2>
-              <p className="text-muted-foreground text-lg">Profile management coming soon</p>
-            </div>
-          </div>
-        )
-      default:
-        return <AuditorHome />
-    }
-  }
 
   const renderContent = () => {
     if (user.role === "patient") {
@@ -217,8 +191,6 @@ export default function HomePage() {
       return renderPharmacyContent()
     } else if (user.role === "admin") {
       return renderAdminContent()
-    } else if (user.role === "auditor") {
-      return renderAuditorContent()
     }
 
     return (
@@ -269,8 +241,6 @@ export default function HomePage() {
     <ResponsiveLayout
       activeTab={activeTab}
       onTabChange={setActiveTab}
-      language={language}
-      onLanguageChange={setLanguage}
       onFloatingCTAClick={handleFloatingCTA}
     >
       {renderContent()}

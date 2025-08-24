@@ -15,7 +15,7 @@ export interface ProofInputs {
 export interface ProofOutput {
   publicSignalsCommitment: `0x${string}`;
   constraintsCommitment: `0x${string}`;
-  circuitId: string;
+  circuitId: "rx-proof-v1";
 }
 
 /**

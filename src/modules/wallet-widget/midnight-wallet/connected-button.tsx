@@ -4,7 +4,7 @@ import { Button } from '../common/button';
 
 // Mock hooks for now until we resolve the compatibility issue
 const useAssets = () => ({
-  address: null
+  address: null as string | null
 })
 
 const useWallet = () => ({
