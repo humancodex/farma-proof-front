@@ -17,10 +17,12 @@ import { InventoryManagement } from "@/components/pharmacy/inventory-management"
 import { OrdersManagement } from "@/components/pharmacy/orders-management"
 import { AdminHome } from "@/components/admin/admin-home"
 import { AuditorHome } from "@/components/auditor/auditor-home"
+import { WalletUI } from "@/components/wallet/wallet-ui"
 import { useAuth } from "@/lib/auth"
 import type { Language } from "@/lib/i18n"
 
 export default function HomePage() {
+
   const { user } = useAuth()
   const [activeTab, setActiveTab] = useState("home")
   const [language, setLanguage] = useState<Language>("en")
@@ -94,6 +96,8 @@ export default function HomePage() {
         return <PatientHome onNavigate={setActiveTab} onStartPurchase={handleStartPurchase} />
       case "wallet":
         return <PrescriptionWallet onGenerateProof={handleGenerateProof} />
+      case "wallet-dashboard":
+        return <WalletUI />
       case "orders":
         return <OrdersList />
       case "profile":
@@ -140,6 +144,8 @@ export default function HomePage() {
         return <OrdersManagement />
       case "inventory":
         return <InventoryManagement />
+      case "wallet-dashboard":
+        return <WalletUI />
       case "profile":
         return (
           <div className="text-center py-12 lg:py-16">
@@ -162,6 +168,8 @@ export default function HomePage() {
         return <AdminHome />
       case "system":
         return <AdminHome />
+      case "wallet-dashboard":
+        return <WalletUI />
       case "profile":
         return (
           <div className="text-center py-12 lg:py-16">
@@ -184,10 +192,12 @@ export default function HomePage() {
         return <AuditorHome />
       case "reports":
         return <AuditorHome />
+      case "wallet-dashboard":
+        return <WalletUI />
       case "profile":
         return (
           <div className="text-center py-12 lg:py-16">
-            <div className="max-w-md mx-auto">
+            <div className="max-w-md mx-4">
               <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-4">Profile</h2>
               <p className="text-muted-foreground text-lg">Profile management coming soon</p>
             </div>

@@ -2,6 +2,7 @@ import type React from "react"
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 import { AuthProvider } from "@/lib/auth"
+import { MidnightProvider } from "@/components/providers/midnight-provider"
 import "./globals.css"
 
 const inter = Inter({
@@ -31,7 +32,9 @@ export default function RootLayout({
   return (
     <html lang="en" className={inter.variable}>
       <body className="font-sans antialiased">
-        <AuthProvider>{children}</AuthProvider>
+        <MidnightProvider>
+          <AuthProvider>{children}</AuthProvider>
+        </MidnightProvider>
       </body>
     </html>
   )

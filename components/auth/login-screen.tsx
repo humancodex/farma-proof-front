@@ -10,8 +10,10 @@ import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Badge } from "@/components/ui/badge"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useAuth, DEMO_USERS, type UserRole } from "@/lib/auth"
 import { useTranslation, type Language } from "@/lib/i18n"
+import { WalletAuth } from "@/components/wallet/wallet-auth"
 
 interface LoginScreenProps {
   language: Language
@@ -46,7 +48,7 @@ export function LoginScreen({ language, onLanguageChange }: LoginScreenProps) {
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-4">
-      <div className="w-full max-w-md space-y-6">
+      <div className="w-full max-w-4xl space-y-6">
         {/* Header */}
         <div className="text-center space-y-2">
           <div className="flex justify-center">
@@ -72,12 +74,19 @@ export function LoginScreen({ language, onLanguageChange }: LoginScreenProps) {
         </div>
 
         {/* Privacy Notice */}
-        <div className="bg-primary/10 border border-primary/20 rounded-lg p-4">
+        <div className="bg-primary/10 border border-primary/20 rounded-lg p-4 max-w-md mx-auto">
           <p className="text-sm text-foreground">{t("privacy.message")}</p>
         </div>
 
-        {/* Login Form */}
-        <Card>
+        {/* Auth Dashboard with Tabs */}
+        <Tabs defaultValue="login" className="w-full">
+          <TabsList className="grid w-full grid-cols-2 max-w-md mx-auto">
+            <TabsTrigger value="login">Authentication</TabsTrigger>
+            <TabsTrigger value="wallet">Wallet</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="login" className="flex justify-center">
+            <Card className="w-full max-w-md">
           <CardHeader>
             <CardTitle>Sign In</CardTitle>
             <CardDescription>Choose a demo role below or enter credentials</CardDescription>
@@ -172,7 +181,15 @@ export function LoginScreen({ language, onLanguageChange }: LoginScreenProps) {
               Demo password: <code className="bg-muted px-1 rounded">demo123</code>
             </div>
           </CardContent>
-        </Card>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="wallet" className="w-full">
+            <div className="w-full">
+              <WalletAuth />
+            </div>
+          </TabsContent>
+        </Tabs>
       </div>
     </div>
   )
