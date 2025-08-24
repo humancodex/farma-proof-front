@@ -122,6 +122,10 @@ class SimpleStore {
     return this.prescriptions.find(p => p.id === id);
   }
 
+  getPaidPrescriptions(): Prescription[] {
+    return this.prescriptions.filter(p => p.isPaid);
+  }
+
   getAll(): Prescription[] {
     return this.prescriptions;
   }
