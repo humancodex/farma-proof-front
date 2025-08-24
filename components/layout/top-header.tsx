@@ -3,6 +3,7 @@
 import { Shield, Globe, Bell } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { RoleSwitcher } from "@/components/auth/role-switcher"
+import { NavbarWallet } from "./navbar-wallet"
 import { useTranslation, type Language } from "@/lib/i18n"
 
 interface TopHeaderProps {
@@ -31,6 +32,7 @@ export function TopHeader({ language, onLanguageChange }: TopHeaderProps) {
 
         {/* Actions */}
         <div className="flex items-center gap-2">
+          <NavbarWallet />
           <Button
             variant="ghost"
             size="sm"

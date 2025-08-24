@@ -3,32 +3,89 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Wallet, Key, Wifi, WifiOff } from "lucide-react"
-import { MidnightWallet } from "../../src/modules/wallet-widget"
+import { useCallback, useState, useEffect } from "react"
 
-// Mock hooks for now until we resolve the compatibility issue
-const useAssets = () => ({
-  address: "Not connected (Provider unavailable)",
-  hasConnectedWallet: false,
-  isProofServerOnline: true, // Show online for demo purposes
-  walletName: "Provider unavailable"
-})
+// Extend the Window interface to include midnight
+declare global {
+  interface Window {
+    midnight?: {
+      mnLace?: {
+        enable(): Promise<{
+          state(): Promise<{ address: string }>;
+        }>;
+      };
+    };
+  }
+}
 
-const useWallet = () => ({
-  connectingWallet: false,
-  disconnect: () => console.log("Wallet provider unavailable"),
-  setOpen: (open: boolean) => console.log("Wallet provider unavailable", open),
-  connectWallet: (walletName: string) => console.log("Wallet provider unavailable", walletName)
-})
+// Custom hook for wallet connection
+const useWallet = () => {
+  const [connected, setConnected] = useState(false)
+  const [address, setAddress] = useState<string | null>(null)
+  const [connecting, setConnecting] = useState(false)
+  const [walletApi, setWalletApi] = useState<any>(null)
+
+  const connectWallet = useCallback(async (walletName: string) => {
+    if (walletName !== "mnLace") return
+    
+    setConnecting(true)
+    try {
+      // @ts-expect-error: window.midnight is injected by wallet extension
+      const api = await window.midnight?.[walletName]?.enable()
+      console.log("Wallet API available:", api)
+      
+      setWalletApi(api)
+      setConnected(true)
+      
+      try {
+        const state = await api.state()
+        console.log('Wallet state', state)
+        setAddress(state.address)
+      } catch (error) {
+        console.log('Error getting wallet state:', error)
+      }
+    } catch (error) {
+      console.log("Error connecting to wallet:", error)
+    } finally {
+      setConnecting(false)
+    }
+  }, [])
+
+  const disconnect = useCallback(() => {
+    setConnected(false)
+    setAddress(null)
+    setWalletApi(null)
+  }, [])
+
+  const setOpen = useCallback((open: boolean) => {
+    console.log("Wallet modal:", open)
+  }, [])
+
+  return {
+    connectingWallet: connecting,
+    disconnect,
+    setOpen,
+    connectWallet,
+    connected,
+    address,
+    walletApi
+  }
+}
 
 export function WalletAuth() {
-  const {
-    address,
-    hasConnectedWallet,
-    isProofServerOnline,
-    walletName,
-  } = useAssets()
-  
-  const { disconnect, setOpen, connectWallet } = useWallet()
+  const { 
+    connectingWallet, 
+    disconnect, 
+    setOpen, 
+    connectWallet, 
+    connected, 
+    address 
+  } = useWallet()
+
+  // Derived values
+  const hasConnectedWallet = connected
+  const isProofServerOnline = true // Mock for now
+  const walletName = connected ? "mnLace" : "Not connected"
 
   return (
     <div className="max-w-2xl mx-auto space-y-6">
@@ -45,7 +102,23 @@ export function WalletAuth() {
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            <MidnightWallet />
+            {/* Wallet Connection Button */}
+            <div className="flex justify-center">
+              <Button 
+                onClick={() => connectWallet("mnLace")}
+                disabled={connectingWallet || hasConnectedWallet}
+                size="lg"
+                className="gap-2"
+              >
+                <Wallet className="h-4 w-4" />
+                {connectingWallet 
+                  ? "Connecting..." 
+                  : hasConnectedWallet 
+                    ? "Connected to Lace" 
+                    : "Connect Lace Wallet"
+                }
+              </Button>
+            </div>
             
             {/* Connection Status */}
             <div className="flex items-center justify-between p-3 bg-muted rounded-lg">
