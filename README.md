@@ -4,6 +4,12 @@
 
 FarmaProof is a revolutionary pharmacy management system that leverages blockchain technology and zero-knowledge proofs to ensure privacy, security, and authenticity in prescription management without compromising patient confidentiality.
 
+<video controls src="Grabación de pantalla 2025-08-24 a la(s) 16.32.45.mov" title="Title"></video>
+
+
+
+
+
 ## ✨ Features
 
 ### 🔐 **Privacy-First Design**
