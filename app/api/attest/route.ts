@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { hashAttestationPayload, signAttestation } from '@/src/lib/attestation';
 import type { AttestationPayloadV2 } from '@/packages/types/attestation';
 
 // In-memory stores (replace with your preferred storage solution)
@@ -124,7 +123,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Hash the payload
-    const payloadHash = hashAttestationPayload(payload);
+
 
     // Sign with Ed25519
     const privateKey = process.env.VERIFIER_ED25519_SK;
@@ -138,20 +137,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const signature = await signAttestation(payloadHash, privateKey);
-
-    // Store attestation metadata in memory
-    const attestationId = `${payload.order_id}-${Date.now()}`;
-    attestations.set(attestationId, {
-      orderId: payload.order_id,
-      payloadHash: '0x' + Buffer.from(payloadHash).toString('hex'),
-      verifierKeyId,
-      signatureAlg: 'Ed25519',
-      signatureHex: signature,
-      validFrom: new Date(payload.valid_from),
-      validUntil: new Date(payload.valid_until),
-    });
-
     // Update order state to PROOF_VALID
     if (order) {
       order.state = 'PROOF_VALID';
@@ -161,7 +146,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       verifier_key_id: verifierKeyId,
       signature_alg: 'Ed25519' as const,
-      signature,
+  
     });
   } catch (error) {
     console.error('Error creating attestation:', error);
