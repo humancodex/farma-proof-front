@@ -31,6 +31,7 @@ interface FormData {
   expiryDays: number
 }
 
+// TODO: with this information we should create the first smart contract
 export function IssuePrescriptionForm({ onComplete, onCancel }: IssuePrescriptionFormProps) {
   const [formData, setFormData] = useState<FormData>({
     patientPseudonym: "",
