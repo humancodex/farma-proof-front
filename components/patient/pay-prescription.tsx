@@ -45,7 +45,7 @@ export function PayPrescription() {
         const transferRecipe = await api.transferTransaction([{
           amount: 50,
           type: { tag: 'native' },
-          receiverAddress: 'mn_shield-addr_test1gpztte8j9ww3tpyjcq6dg3pv6zveq029ncfx8ashlc0992x2agyqxq8ae4s9sumzaxlmyxwyxkutcftu70kazfrrx00twndcr8euwwr3h5zpz8v9'
+          receiverAddress: 'mn_shield-addr_test1e5mm2tcxcwvdwwnm5cgp8a4as2l5gmq4p46t2kv8cq5u760zs9mqxqqxqg9rmpknnegysnzxvz0g4amkaa5rn7zv9q2rv69ya0hg20w4fgrsdgr3'
         }]);
         
         const provenTx = await api.proveTransaction(transferRecipe);

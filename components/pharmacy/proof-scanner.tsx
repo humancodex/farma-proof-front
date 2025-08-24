@@ -7,7 +7,11 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { verifyZKProof } from "@/lib/zk-services"
+// Mock ZK proof verification for demo
+const verifyZKProof = async (proofId: string): Promise<boolean> => {
+  await new Promise(resolve => setTimeout(resolve, 1000))
+  return Math.random() > 0.05 // 95% success rate
+}
 import { DEMO_ORDERS, DEMO_PRESCRIPTION_VCS, DEMO_MEDICINES } from "@/lib/demo-data"
 import { useFarma } from "@/src/hooks/useFarma"
 import { Status } from "@/packages/types/prescription"

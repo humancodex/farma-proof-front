@@ -15,7 +15,39 @@ import {
   type Medicine,
   type PrescriptionVC,
 } from "@/lib/demo-data"
-import { generateZKProof, payOnMidnight, type ZKProof } from "@/lib/zk-services"
+// Mock ZK proof interface for demo
+interface ZKProof {
+  id: string
+  vcId: string
+  medicineId: string
+  quantity: number
+  proofHash: string
+  isValid: boolean
+  generatedAt: string
+}
+
+// Mock functions for demo
+const generateZKProof = async (vcId: string, medicineId: string, quantity: number): Promise<ZKProof> => {
+  await new Promise(resolve => setTimeout(resolve, 2000))
+  return {
+    id: `proof-${Date.now()}`,
+    vcId,
+    medicineId,
+    quantity,
+    proofHash: `0x${Math.random().toString(16).substr(2, 32)}`,
+    isValid: true,
+    generatedAt: new Date().toISOString(),
+  }
+}
+
+const payOnMidnight = async (amount: number, proofId: string) => {
+  await new Promise(resolve => setTimeout(resolve, 1500))
+  return {
+    success: Math.random() > 0.1,
+    txHash: `0x${Math.random().toString(16).substr(2, 40)}`,
+    error: Math.random() > 0.1 ? undefined : "Payment failed. Please try again."
+  }
+}
 import { useFarma } from "@/src/hooks/useFarma"
 import { Status } from "@/packages/types/prescription"
 import { PrescriptionStatusManager } from "@/src/lib/prescriptionStatus"

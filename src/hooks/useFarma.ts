@@ -1,9 +1,81 @@
 'use client';
 
 import { useState, useCallback } from 'react';
-import { createOrder, buildAttestationPayload, requestAttestation, getOrder } from '@/src/lib/attestationFlow';
-import { generateProof } from '@/src/lib/zk';
-import { OrderEscrow } from '@/src/lib/contracts';
+// Mock implementations replacing deleted files
+const createOrder = async (params: { medicine_code_hash: string; qty_requested: number }) => {
+  await new Promise(resolve => setTimeout(resolve, 500))
+  return {
+    order_id: Date.now().toString(),
+    nonce_hex: `0x${Math.random().toString(16).substr(2, 16)}`
+  }
+}
+
+const buildAttestationPayload = (params: any) => ({
+  attestation_version: "2",
+  domain: "FARMA_PROOF/ACCEPT_PROOF",
+  ...params
+})
+
+const requestAttestation = async (params: any) => {
+  await new Promise(resolve => setTimeout(resolve, 500))
+  return {
+    verifier_key_id: "mock-verifier",
+    signature: `0x${Math.random().toString(16).substr(2, 64)}`
+  }
+}
+
+const getOrder = async (orderId: string) => {
+  await new Promise(resolve => setTimeout(resolve, 300))
+  return {
+    id: orderId,
+    nonce_hex: `0x${Math.random().toString(16).substr(2, 16)}`,
+    medicine_code_hash: `0x${Math.random().toString(16).substr(2, 64)}`,
+    qty_requested: 2,
+    state: 'PROOF_VALID',
+    created_at: new Date().toISOString()
+  }
+}
+
+const generateProof = async (inputs: any) => {
+  await new Promise(resolve => setTimeout(resolve, 100))
+  return {
+    publicSignalsCommitment: `0x${Math.random().toString(16).substr(2, 64)}` as `0x${string}`,
+    constraintsCommitment: `0x${Math.random().toString(16).substr(2, 64)}` as `0x${string}`,
+    circuitId: 'rx-proof-v1' as const
+  }
+}
+
+const OrderEscrow = {
+  async acceptProof(orderId: string, data: any) {
+    await new Promise(resolve => setTimeout(resolve, 1000))
+    return {
+      success: true,
+      txHash: `0x${Math.random().toString(16).substr(2, 40)}`
+    }
+  },
+  async pay(orderId: string, assetParams?: any) {
+    await new Promise(resolve => setTimeout(resolve, 1000))
+    return {
+      success: true,
+      txHash: `0x${Math.random().toString(16).substr(2, 40)}`
+    }
+  },
+  async fulfill(orderId: string, tokenId?: string) {
+    await new Promise(resolve => setTimeout(resolve, 1000))
+    return {
+      success: true,
+      txHash: `0x${Math.random().toString(16).substr(2, 40)}`
+    }
+  },
+  async getOrderState(orderId: string) {
+    await new Promise(resolve => setTimeout(resolve, 300))
+    return {
+      state: 'PAID' as const,
+      medicineCodeHash: `0x${Math.random().toString(16).substr(2, 64)}`,
+      qtyRequested: 2
+    }
+  }
+}
 
 export interface PurchaseParams {
   medicineCodeHash: `0x${string}`;

@@ -64,17 +64,32 @@ class PharmaContract {
     }
   }
 
-  async payPrescription(tokenId: bigint) {
+  async getPaymentReceiver(prescriptionId: string): Promise<string | null> {
+    try {
+      // In real implementation, this would query the contract state
+      // to get the pharmacy wallet or escrow contract address
+      // For now, return null to use fallback logic
+      return null;
+    } catch (error) {
+      console.error('Failed to get payment receiver:', error);
+      return null;
+    }
+  }
+
+  async payPrescription(tokenId: bigint, receiverAddress?: string) {
     if (!this.wallet || !this.contract) {
       throw new Error('Contract not initialized');
     }
 
     try {
+      const receiver = receiverAddress || process.env.NEXT_PUBLIC_RECEIVER_ADDRESS || 
+                      'mn_shield-addr_test1gpztte8j9ww3tpyjcq6dg3pv6zveq029ncfx8ashlc0992x2agyqxq8ae4s9sumzaxlmyxwyxkutcftu70kazfrrx00twndcr8euwwr3h5zpz8v9';
+      
       // Create tDust transfer
       const transferRecipe = await this.wallet.transferTransaction([{
         amount: 50,
         type: { tag: 'native' },
-        receiverAddress: 'mn_shield-addr_test1gpztte8j9ww3tpyjcq6dg3pv6zveq029ncfx8ashlc0992x2agyqxq8ae4s9sumzaxlmyxwyxkutcftu70kazfrrx00twndcr8euwwr3h5zpz8v9'
+        receiverAddress: receiver
       }]);
 
       const provenTx = await this.wallet.proveTransaction(transferRecipe);
@@ -97,3 +112,4 @@ class PharmaContract {
 }
 
 export const pharmaContract = new PharmaContract();
+export const contract = pharmaContract;
