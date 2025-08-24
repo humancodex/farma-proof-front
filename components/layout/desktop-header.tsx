@@ -3,11 +3,7 @@
 import { Heart } from "lucide-react"
 import { RoleSwitcher } from "@/components/auth/role-switcher"
 
-interface DesktopHeaderProps {
-  onMenuToggle?: () => void
-}
-
-export function DesktopHeader({ onMenuToggle }: DesktopHeaderProps) {
+export function DesktopHeader() {
   return (
     <header className="lg:pl-64 bg-background border-b border-border sticky top-0 z-30">
       <div className="flex items-center justify-between px-6 py-4">

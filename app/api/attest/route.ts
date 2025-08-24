@@ -1,8 +1,26 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { db, orders, attestations } from '@/src/db';
-import { eq } from 'drizzle-orm';
 import { hashAttestationPayload, signAttestation } from '@/src/lib/attestation';
 import type { AttestationPayloadV2 } from '@/packages/types/attestation';
+
+// In-memory stores (replace with your preferred storage solution)
+const orders = new Map<string, {
+  id: string;
+  nonceHex: string;
+  medicineCodeHash: string;
+  qtyRequested: number;
+  state: string;
+  createdAt: Date;
+}>();
+
+const attestations = new Map<string, {
+  orderId: string;
+  payloadHash: string;
+  verifierKeyId: string;
+  signatureAlg: string;
+  signatureHex: string;
+  validFrom: Date;
+  validUntil: Date;
+}>();
 
 // Rate limiting - simple in-memory store (use Redis in production)
 const rateLimitStore = new Map<string, { count: number; resetTime: number }>();
@@ -83,10 +101,8 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Validate against database
-    const order = await db.query.orders.findFirst({
-      where: eq(orders.id, parseInt(payload.order_id)),
-    });
+    // Validate against in-memory store
+    const order = orders.get(payload.order_id);
 
     if (!order) {
       return NextResponse.json(
@@ -124,9 +140,10 @@ export async function POST(request: NextRequest) {
 
     const signature = await signAttestation(payloadHash, privateKey);
 
-    // Store attestation metadata in database
-    await db.insert(attestations).values({
-      orderId: parseInt(payload.order_id),
+    // Store attestation metadata in memory
+    const attestationId = `${payload.order_id}-${Date.now()}`;
+    attestations.set(attestationId, {
+      orderId: payload.order_id,
       payloadHash: '0x' + Buffer.from(payloadHash).toString('hex'),
       verifierKeyId,
       signatureAlg: 'Ed25519',
@@ -136,9 +153,10 @@ export async function POST(request: NextRequest) {
     });
 
     // Update order state to PROOF_VALID
-    await db.update(orders)
-      .set({ state: 'PROOF_VALID' })
-      .where(eq(orders.id, parseInt(payload.order_id)));
+    if (order) {
+      order.state = 'PROOF_VALID';
+      orders.set(payload.order_id, order);
+    }
 
     return NextResponse.json({
       verifier_key_id: verifierKeyId,
